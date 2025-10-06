@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Builder - Sonoaac Resume Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- PDF Generation Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #f1f1f1;
+      background-color: #0d0d0d;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    header {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ff5ca9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: #f1f1f1;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ff5ca9;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 35px;
+      left: 0;
+      background-color: #111;
+      border-radius: 6px;
+      min-width: 220px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      z-index: 1;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #f1f1f1;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background: #ff5ca9;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Builder Layout */
+    .builder-container {
+      display: flex;
+      min-height: calc(100vh - 80px);
+    }
+
+    .form-panel {
+      width: 40%;
+      background: #1a1a1a;
+      padding: 2rem;
+      overflow-y: auto;
+      border-right: 1px solid #333;
+    }
+
+    .preview-panel {
+      width: 60%;
+      background: #111;
+      padding: 2rem;
+      overflow-y: auto;
+    }
+
+    /* Form Styles */
+    .form-section {
+      margin-bottom: 2rem;
+      background: #222;
+      padding: 1.5rem;
+      border-radius: 10px;
+      border: 1px solid #333;
+    }
+
+    .form-section h3 {
+      color: #ff5ca9;
+      margin-bottom: 1rem;
+      font-size: 1.2rem;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #444;
+      border-radius: 5px;
+      background: #333;
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #ff5ca9;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #ff5ca9;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #ff86c1;
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn:disabled:hover {
+      background: #ff5ca9;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #ff5ca9;
+      border: 2px solid #ff5ca9;
+    }
+
+    .btn-secondary:hover {
+      background: #ff5ca9;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-small {
+      padding: 5px 15px;
+      font-size: 0.8rem;
+    }
+
+    /* Preview Styles */
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .preview-header h2 {
+      color: #fff;
+      font-size: 1.5rem;
+    }
+
+    .preview-controls {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .resume-preview {
+      background: #fff;
+      color: #333;
+      padding: 2rem;
+      border-radius: 10px;
+      min-height: 800px;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.6;
+    }
+
+    /* Template-specific preview styles */
+    .modern-preview {
+      font-family: 'Inter', sans-serif;
+    }
+
+    .modern-preview .resume-header {
+      border-bottom: 2px solid #333;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .modern-preview .resume-name {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.5rem;
+    }
+
+    .modern-preview .resume-title {
+      font-size: 1.1rem;
+      color: #666;
+      margin-bottom: 0.5rem;
+    }
+
+    .modern-preview .resume-contact {
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    .modern-preview .resume-section {
+      margin-bottom: 1.5rem;
+    }
+
+    .modern-preview .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #333;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .modern-preview .experience-item {
+      margin-bottom: 1rem;
+    }
+
+    .modern-preview .job-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .modern-preview .company {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .modern-preview .job-description {
+      color: #555;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    /* New Template Styles */
+    
+    /* Executive Classic */
+    .exec-preview {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 2rem;
+      font-family: 'Georgia', serif;
+    }
+    .exec-preview .resume-header {
+      grid-column: 1 / -1;
+      text-align: center;
+      border-bottom: 3px solid #333;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .exec-preview .resume-name {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .exec-preview .resume-title {
+      font-size: 1.2rem;
+      color: #666;
+      font-style: italic;
+    }
+    .exec-preview .main-content {
+      grid-column: 1;
+    }
+    .exec-preview .sidebar {
+      grid-column: 2;
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+
+    /* Boardroom Blackline */
+    .board-preview {
+      font-family: 'Arial', sans-serif;
+    }
+    .board-preview .resume-header {
+      border-bottom: 4px solid #000;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .board-preview .resume-name {
+      font-size: 2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    .board-preview .section-title {
+      border-bottom: 2px solid #000;
+      padding-bottom: 0.5rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Consultant Edge */
+    .consult-preview {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 2rem;
+      font-family: 'Helvetica', sans-serif;
+    }
+    .consult-preview .resume-header {
+      grid-column: 1 / -1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .consult-preview .main-content {
+      grid-column: 1;
+    }
+    .consult-preview .sidebar {
+      grid-column: 2;
+      background: #f5f5f5;
+      padding: 1.5rem;
+      border-left: 4px solid #333;
+    }
+    .consult-preview .experience-item {
+      border-left: 3px solid #333;
+      padding-left: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Leadership Layout */
+    .lead-preview {
+      font-family: 'Times New Roman', serif;
+    }
+    .lead-preview .resume-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .lead-preview .resume-name {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .lead-preview .resume-title {
+      font-size: 1.3rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .lead-preview .section-title {
+      background: #333;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      margin: 1.5rem 0 1rem 0;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    /* Corporate Minimalist */
+    .min-preview {
+      font-family: 'Arial', sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .min-preview .resume-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .min-preview .resume-name {
+      font-size: 1.8rem;
+      font-weight: 300;
+      margin-bottom: 0.5rem;
+    }
+    .min-preview .section-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #333;
+    }
+    .min-preview .experience-item {
+      margin-bottom: 1.5rem;
+    }
+
+    /* Retail Rhythm */
+    .retail-preview {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      font-family: 'Arial', sans-serif;
+    }
+    .retail-preview .resume-header {
+      grid-column: 1 / -1;
+      text-align: center;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .retail-preview .sidebar {
+      grid-column: 1;
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+    }
+    .retail-preview .main-content {
+      grid-column: 2;
+    }
+    .retail-preview .section-title {
+      background: #333;
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      text-transform: uppercase;
+    }
+
+    /* Customer Focus */
+    .cust-preview {
+      font-family: 'Arial', sans-serif;
+    }
+    .cust-preview .resume-header {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .cust-preview .stats-highlight {
+      background: #e9ecef;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .cust-preview .section-title {
+      color: #333;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border-left: 4px solid #333;
+      padding-left: 1rem;
+    }
+
+    /* Service Smile */
+    .service-preview {
+      font-family: 'Arial', sans-serif;
+    }
+    .service-preview .resume-header {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 12px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .service-preview .section-title {
+      background: #333;
+      color: #fff;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      margin-bottom: 1rem;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+    .service-preview .experience-item {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+
+    /* Sales Drive */
+    .sales-preview {
+      font-family: 'Arial', sans-serif;
+    }
+    .sales-preview .resume-header {
+      text-align: center;
+      border-bottom: 3px solid #333;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .sales-preview .metrics-bar {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: center;
+    }
+    .sales-preview .section-title {
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* Hospitality Charm */
+    .hosp-preview {
+      font-family: 'Arial', sans-serif;
+    }
+    .hosp-preview .resume-header {
+      background: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .hosp-preview .guest-focus {
+      background: #e9ecef;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      font-style: italic;
+      text-align: center;
+    }
+    .hosp-preview .section-title {
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 0.5rem;
+    }
+
+    /* Print Styles */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      .resume-preview, .resume-preview * {
+        visibility: visible;
+      }
+      .resume-preview {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100% !important;
+        max-width: none !important;
+        margin: 0 !important;
+        padding: 20px !important;
+        box-shadow: none !important;
+        border: none !important;
+        background: white !important;
+        color: black !important;
+        font-size: 12pt !important;
+        line-height: 1.4 !important;
+      }
+      .preview-controls {
+        display: none !important;
+      }
+      .form-panel {
+        display: none !important;
+      }
+      .preview-panel {
+        width: 100% !important;
+        border: none !important;
+      }
+      .resume-header {
+        page-break-after: avoid;
+      }
+      .resume-section {
+        page-break-inside: avoid;
+        margin-bottom: 15px !important;
+      }
+      .experience-item {
+        page-break-inside: avoid;
+        margin-bottom: 10px !important;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .builder-container {
+        flex-direction: column;
+      }
+
+      .form-panel,
+      .preview-panel {
+        width: 100%;
+      }
+
+      .form-panel {
+        border-right: none;
+        border-bottom: 1px solid #333;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Sonoaac</div>
+      <div class="nav-links">
+        <div class="dropdown">
+          <a href="#">Features ▾</a>
+          <div class="dropdown-content">
+            <a href="builder.html">Resume Builder</a>
+            <a href="#">Cover Letter Builder</a>
+            <a href="#">Website Builder</a>
+            <a href="#">Career Map</a>
+          </div>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="templates.html">Templates</a>
+        <a href="resume-examples.html">Resume Examples</a>
+        <a href="builder.html" class="btn btn-primary">Start Building</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="builder-container">
+    <!-- Form Panel -->
+    <div class="form-panel">
+      <h2 style="color: #ff5ca9; margin-bottom: 2rem;">Build Your Resume</h2>
+      
+      <!-- Template Selection -->
+      <div class="form-section">
+        <h3>Choose Template</h3>
+        <div class="form-group">
+          <label for="template">Template Style</label>
+          <select id="template">
+            <option value="exec">Executive Classic</option>
+            <option value="board">Boardroom Blackline</option>
+            <option value="consult">Consultant Edge</option>
+            <option value="lead">Leadership Layout</option>
+            <option value="min">Corporate Minimalist</option>
+            <option value="retail">Retail Rhythm</option>
+            <option value="cust">Customer Focus</option>
+            <option value="service">Service Smile</option>
+            <option value="sales">Sales Drive</option>
+            <option value="hosp">Hospitality Charm</option>
+            <!-- Legacy templates for backward compatibility -->
+            <option value="modern">Modern (Legacy)</option>
+            <option value="creative">Creative (Legacy)</option>
+            <option value="professional">Professional (Legacy)</option>
+            <option value="minimal">Minimal (Legacy)</option>
+            <option value="corporate">Corporate (Legacy)</option>
+            <option value="elegant">Elegant (Legacy)</option>
+            <option value="tech">Tech (Legacy)</option>
+            <option value="healthcare">Healthcare (Legacy)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Personal Information -->
+      <div class="form-section">
+        <h3>Personal Information</h3>
+        <div class="form-group">
+          <label for="fullName">Full Name</label>
+          <input type="text" id="fullName" placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label for="jobTitle">Professional Title</label>
+          <input type="text" id="jobTitle" placeholder="Software Engineer">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="john.doe@email.com">
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" placeholder="(555) 123-4567">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="location">Location</label>
+          <input type="text" id="location" placeholder="San Francisco, CA">
+        </div>
+        <div class="form-group">
+          <label for="linkedin">LinkedIn Profile</label>
+          <input type="url" id="linkedin" placeholder="https://linkedin.com/in/johndoe">
+        </div>
+        <div class="form-group">
+          <label for="website">Website/Portfolio</label>
+          <input type="url" id="website" placeholder="https://johndoe.com">
+        </div>
+        <div class="form-group">
+          <label for="summary">Professional Summary</label>
+          <textarea id="summary" placeholder="A brief overview of your professional background and career goals..."></textarea>
+        </div>
+      </div>
+
+      <!-- Work Experience -->
+      <div class="form-section">
+        <h3>Work Experience</h3>
+        <div class="form-group">
+          <label for="currentJob">Current Job Title</label>
+          <input type="text" id="currentJob" placeholder="Senior Software Engineer">
+        </div>
+        <div class="form-group">
+          <label for="currentCompany">Current Company</label>
+          <input type="text" id="currentCompany" placeholder="Tech Corp">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="text" id="startDate" placeholder="2020">
+          </div>
+          <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="text" id="endDate" placeholder="Present">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="jobDescription">Job Description</label>
+          <textarea id="jobDescription" placeholder="Describe your key responsibilities and achievements..."></textarea>
+        </div>
+        <button class="btn btn-secondary btn-small">+ Add Another Job</button>
+      </div>
+
+      <!-- Education -->
+      <div class="form-section">
+        <h3>Education</h3>
+        <div class="form-group">
+          <label for="degree">Degree</label>
+          <input type="text" id="degree" placeholder="Bachelor of Science in Computer Science">
+        </div>
+        <div class="form-group">
+          <label for="school">School/University</label>
+          <input type="text" id="school" placeholder="University of California">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gradYear">Graduation Year</label>
+            <input type="text" id="gradYear" placeholder="2018">
+          </div>
+          <div class="form-group">
+            <label for="gpa">GPA (Optional)</label>
+            <input type="text" id="gpa" placeholder="3.8">
+          </div>
+        </div>
+        <button class="btn btn-secondary btn-small">+ Add Another Degree</button>
+      </div>
+
+      <!-- Skills -->
+      <div class="form-section">
+        <h3>Skills</h3>
+        <div class="form-group">
+          <label for="technicalSkills">Technical Skills</label>
+          <textarea id="technicalSkills" placeholder="JavaScript, React, Node.js, Python, SQL..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="softSkills">Soft Skills</label>
+          <textarea id="softSkills" placeholder="Leadership, Communication, Problem Solving..."></textarea>
+        </div>
+      </div>
+
+      <!-- Additional Sections -->
+      <div class="form-section">
+        <h3>Additional Information</h3>
+        <div class="form-group">
+          <label for="certifications">Certifications</label>
+          <textarea id="certifications" placeholder="AWS Certified Developer, Google Analytics Certified..."></textarea>
+        </div>
+        <div class="form-group">
+          <label for="languages">Languages</label>
+          <input type="text" id="languages" placeholder="English (Native), Spanish (Fluent)">
+        </div>
+        <div class="form-group">
+          <label for="projects">Projects</label>
+          <textarea id="projects" placeholder="Describe your notable projects and achievements..."></textarea>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-section">
+        <button class="btn btn-primary" style="width: 100%; margin-bottom: 1rem;">Save Resume</button>
+        <button class="btn btn-secondary" style="width: 100%;">Export to PDF</button>
+      </div>
+    </div>
+
+    <!-- Preview Panel -->
+    <div class="preview-panel">
+      <div class="preview-header">
+        <h2>Live Preview</h2>
+        <div class="preview-controls">
+          <button class="btn btn-secondary btn-small" onclick="printResume()">Print</button>
+          <button class="btn btn-primary btn-small" onclick="downloadPDF()">Download PDF</button>
+        </div>
+      </div>
+      
+      <div class="resume-preview modern-preview">
+        <div class="resume-header">
+          <div class="resume-name">John Doe</div>
+          <div class="resume-title">Software Engineer</div>
+          <div class="resume-contact">john.doe@email.com | (555) 123-4567 | San Francisco, CA</div>
+        </div>
+
+        <div class="main-content">
+          <div class="resume-section">
+            <div class="section-title">Professional Summary</div>
+            <p>Experienced software engineer with 5+ years of experience in full-stack development. Passionate about creating scalable web applications and leading development teams.</p>
+          </div>
+
+          <div class="resume-section">
+            <div class="section-title">Work Experience</div>
+            <div class="experience-item">
+              <div class="job-title">Senior Software Engineer</div>
+              <div class="company">Tech Corp | 2020 - Present</div>
+              <div class="job-description">
+                • Led development of web applications using React and Node.js<br>
+                • Improved application performance by 40% through code optimization<br>
+                • Mentored junior developers and conducted code reviews
+              </div>
+            </div>
+          </div>
+
+          <div class="resume-section">
+            <div class="section-title">Education</div>
+            <div class="experience-item">
+              <div class="job-title">Bachelor of Science in Computer Science</div>
+              <div class="company">University of California | 2018</div>
+              <div class="job-description">GPA: 3.8/4.0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar">
+          <div class="resume-section">
+            <div class="section-title">Skills</div>
+            <p><strong>Technical:</strong> JavaScript, React, Node.js, Python, SQL, AWS<br>
+            <strong>Soft Skills:</strong> Leadership, Communication, Problem Solving</p>
+          </div>
+
+          <div class="resume-section">
+            <div class="section-title">Certifications</div>
+            <p>AWS Certified Developer<br>
+            Google Cloud Professional</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Template switching and form to preview binding
+    document.addEventListener('DOMContentLoaded', function() {
+      const templateSelect = document.getElementById('template');
+      const resumePreview = document.querySelector('.resume-preview');
+      
+      // Template switching functionality
+      templateSelect.addEventListener('change', function() {
+        const selectedTemplate = this.value;
+        updateTemplatePreview(selectedTemplate);
+      });
+
+      // Form to preview binding
+      const inputs = document.querySelectorAll('input, textarea, select');
+      const previewElements = {
+        'fullName': '.resume-name',
+        'jobTitle': '.resume-title',
+        'email': '.resume-contact',
+        'phone': '.resume-contact',
+        'location': '.resume-contact',
+        'summary': '.resume-section p',
+        'currentJob': '.job-title',
+        'currentCompany': '.company',
+        'jobDescription': '.job-description',
+        'degree': '.job-title',
+        'school': '.company',
+        'technicalSkills': '.resume-section p'
+      };
+
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          const fieldName = this.id;
+          const previewSelector = previewElements[fieldName];
+          
+          if (previewSelector) {
+            const previewElement = document.querySelector(previewSelector);
+            if (previewElement) {
+              if (fieldName === 'email' || fieldName === 'phone' || fieldName === 'location') {
+                // Update contact info
+                const email = document.getElementById('email').value || 'john.doe@email.com';
+                const phone = document.getElementById('phone').value || '(555) 123-4567';
+                const location = document.getElementById('location').value || 'San Francisco, CA';
+                previewElement.textContent = `${email} | ${phone} | ${location}`;
+              } else {
+                previewElement.textContent = this.value || previewElement.textContent;
+              }
+            }
+          }
+        });
+      });
+
+      // Check for template parameter in URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const templateParam = urlParams.get('template');
+      if (templateParam) {
+        templateSelect.value = templateParam;
+        updateTemplatePreview(templateParam);
+      }
+    });
+
+    function updateTemplatePreview(template) {
+      const resumePreview = document.querySelector('.resume-preview');
+      
+      // Remove existing template classes
+      resumePreview.className = 'resume-preview';
+      
+      // Add new template class
+      resumePreview.classList.add(template + '-preview');
+      
+      // Update template-specific content and structure
+      switch(template) {
+        case 'exec':
+          // Executive Classic - Two column layout
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'board':
+          // Boardroom Blackline - Strong lines
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'consult':
+          // Consultant Edge - Timeline with sidebar
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'lead':
+          // Leadership Layout - Centered with black headers
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'min':
+          // Corporate Minimalist - Clean and simple
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'retail':
+          // Retail Rhythm - Skills sidebar
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'cust':
+          // Customer Focus - Stats highlights
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          addCustomerStats();
+          break;
+        case 'service':
+          // Service Smile - Rounded sections
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'sales':
+          // Sales Drive - Metrics bars
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          addSalesMetrics();
+          break;
+        case 'hosp':
+          // Hospitality Charm - Guest focus
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          addHospitalityFocus();
+          break;
+        // Legacy templates
+        case 'creative':
+          resumePreview.style.background = 'linear-gradient(135deg, #ff5ca9, #ff86c1)';
+          resumePreview.style.color = '#fff';
+          break;
+        case 'tech':
+          resumePreview.style.background = 'linear-gradient(135deg, #1a1a1a, #2a2a2a)';
+          resumePreview.style.color = '#fff';
+          break;
+        case 'professional':
+        case 'corporate':
+        case 'healthcare':
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          break;
+        case 'elegant':
+          resumePreview.style.background = 'linear-gradient(135deg, #ffffff, #f8f9fa)';
+          resumePreview.style.color = '#333';
+          resumePreview.style.fontFamily = 'Georgia, serif';
+          break;
+        default:
+          resumePreview.style.background = '#fff';
+          resumePreview.style.color = '#333';
+          resumePreview.style.fontFamily = 'Inter, sans-serif';
+      }
+    }
+
+    // Template-specific content functions
+    function addCustomerStats() {
+      const summarySection = document.querySelector('.resume-section:first-of-type');
+      if (summarySection && !summarySection.querySelector('.stats-highlight')) {
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'stats-highlight';
+        statsDiv.innerHTML = '<strong>Customer Satisfaction: 98%</strong> | <strong>Repeat Business: 85%</strong>';
+        summarySection.appendChild(statsDiv);
+      }
+    }
+
+    function addSalesMetrics() {
+      const experienceSection = document.querySelector('.resume-section:nth-of-type(2)');
+      if (experienceSection && !experienceSection.querySelector('.metrics-bar')) {
+        const metricsDiv = document.createElement('div');
+        metricsDiv.className = 'metrics-bar';
+        metricsDiv.innerHTML = '<strong>Sales Performance:</strong> 150% of target | <strong>Revenue Growth:</strong> 40% YoY';
+        experienceSection.appendChild(metricsDiv);
+      }
+    }
+
+    function addHospitalityFocus() {
+      const summarySection = document.querySelector('.resume-section:first-of-type');
+      if (summarySection && !summarySection.querySelector('.guest-focus')) {
+        const focusDiv = document.createElement('div');
+        focusDiv.className = 'guest-focus';
+        focusDiv.innerHTML = '"Creating memorable experiences for every guest"';
+        summarySection.appendChild(focusDiv);
+      }
+    }
+
+    // Print and PDF Download Functions
+    function printResume() {
+      // Hide form panel and show only resume
+      const formPanel = document.querySelector('.form-panel');
+      const previewPanel = document.querySelector('.preview-panel');
+      const resumePreview = document.querySelector('.resume-preview');
+      
+      // Store original styles
+      const originalFormDisplay = formPanel.style.display;
+      const originalPreviewWidth = previewPanel.style.width;
+      const originalResumeWidth = resumePreview.style.width;
+      
+      // Hide form and expand preview
+      formPanel.style.display = 'none';
+      previewPanel.style.width = '100%';
+      resumePreview.style.width = '100%';
+      resumePreview.style.maxWidth = 'none';
+      
+      // Print
+      window.print();
+      
+      // Restore original styles
+      formPanel.style.display = originalFormDisplay;
+      previewPanel.style.width = originalPreviewWidth;
+      resumePreview.style.width = originalResumeWidth;
+      resumePreview.style.maxWidth = '800px';
+    }
+
+    async function downloadPDF() {
+      const resumePreview = document.querySelector('.resume-preview');
+      const formPanel = document.querySelector('.form-panel');
+      
+      // Store original styles
+      const originalFormDisplay = formPanel.style.display;
+      const originalResumeWidth = resumePreview.style.width;
+      const originalResumeMaxWidth = resumePreview.style.maxWidth;
+      
+      // Hide form and expand resume for PDF
+      formPanel.style.display = 'none';
+      resumePreview.style.width = '100%';
+      resumePreview.style.maxWidth = 'none';
+      
+      // Configure PDF options
+      const opt = {
+        margin: 0.5,
+        filename: 'resume.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { 
+          scale: 2,
+          useCORS: true,
+          letterRendering: true
+        },
+        jsPDF: { 
+          unit: 'in', 
+          format: 'letter', 
+          orientation: 'portrait' 
+        }
+      };
+      
+      try {
+        // Show loading state
+        const downloadBtn = document.querySelector('.btn-primary');
+        const originalText = downloadBtn.textContent;
+        downloadBtn.textContent = 'Generating PDF...';
+        downloadBtn.disabled = true;
+        
+        // Generate PDF
+        await html2pdf().set(opt).from(resumePreview).save();
+        
+        // Restore button state
+        downloadBtn.textContent = originalText;
+        downloadBtn.disabled = false;
+        
+      } catch (error) {
+        console.error('PDF generation failed:', error);
+        alert('PDF generation failed. Please try again.');
+        
+        // Restore button state
+        const downloadBtn = document.querySelector('.btn-primary');
+        downloadBtn.textContent = 'Download PDF';
+        downloadBtn.disabled = false;
+      }
+      
+      // Restore original styles
+      formPanel.style.display = originalFormDisplay;
+      resumePreview.style.width = originalResumeWidth;
+      resumePreview.style.maxWidth = originalResumeMaxWidth;
+    }
+
+    // Initialize buttons when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      // Ensure buttons are properly initialized
+      const printBtn = document.querySelector('.btn-secondary');
+      const downloadBtn = document.querySelector('.btn-primary');
+      
+      if (printBtn && !printBtn.onclick) {
+        printBtn.onclick = printResume;
+      }
+      
+      if (downloadBtn && !downloadBtn.onclick) {
+        downloadBtn.onclick = downloadPDF;
+      }
+    });
+  </script>
+</body>
+</html>

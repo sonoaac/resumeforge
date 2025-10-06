@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>SonoaacResume — Templates Gallery (first 10)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg: #f6f6f7;
+      --page-bg: #0b0b0b;
+      --card-white: #ffffff;
+      --muted: #7a7a7a;
+      --border: rgba(0,0,0,0.06);
+      --glass: rgba(255,255,255,0.04);
+      --radius: 12px;
+      --gap: 18px;
+    }
+    /* Page */
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: var(--page-bg);
+      color: #fff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+    .wrap{
+      max-width:1200px;
+      margin:36px auto;
+      padding:20px;
+    }
+    header.topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:18px;
+    }
+    header .brand{
+      font-size:1.25rem;
+      font-weight:700;
+      color:#fff;
+    }
+    header .lead{
+      color:#ddd;
+      font-size:0.95rem;
+    }
+
+    h1.page-title{
+      color: #fff;
+      font-size:1.4rem;
+      margin:6px 0 18px 0;
+      font-weight:600;
+    }
+    p.lead{
+      color:#d3d3d3;
+      margin:0 0 22px 0;
+      font-size:0.95rem;
+    }
+
+    /* Grid */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: var(--gap);
+      align-items: start;
+    }
+
+    /* Card */
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius: var(--radius);
+      padding:14px;
+      border:1px solid rgba(255,255,255,0.04);
+      transition: transform 260ms cubic-bezier(.2,.9,.2,1), box-shadow 260ms;
+      cursor: default;
+    }
+    .card:hover{
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(0,0,0,0.6);
+    }
+
+    .card .meta{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .card .meta .name{
+      font-size:0.98rem;
+      font-weight:700;
+      color:#fff;
+    }
+    .card .meta .cat{
+      color:var(--muted);
+      font-size:0.82rem;
+      padding:6px 8px;
+      border-radius:8px;
+      background: rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    /* Thumbnail / mini resume */
+    .thumb{
+      background: var(--card-white);
+      color: #111;
+      border-radius: 8px;
+      padding:12px;
+      min-height:170px;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+      border:1px solid var(--border);
+    }
+
+    /* header area inside mini resume */
+    .t-header{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:8px;
+    }
+    .t-name{
+      font-weight:700;
+      font-size:1rem;
+    }
+    .t-role{
+      font-size:0.78rem;
+      color:var(--muted);
+    }
+
+    .t-divider{
+      height:2px;
+      border-radius:2px;
+      background: #efefef;
+      width:100%;
+      margin:6px 0;
+    }
+
+    .t-section-title{
+      font-size:0.82rem;
+      font-weight:700;
+      margin-bottom:6px;
+      color:#111;
+    }
+
+    .t-lines{ display:flex; flex-direction:column; gap:6px; }
+    .t-line{ height:8px; background:#f2f2f2; border-radius:6px; width:100%; }
+    .t-line.short{ width:58%; }
+    .t-line.sm{ height:6px; width:40%; }
+
+    .t-left-right{ display:flex; gap:10px; align-items:flex-start; }
+    .t-left{ flex:1; }
+    .t-right{ width:110px; flex-shrink:0; }
+
+    /* small footer actions */
+    .card-footer{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      margin-top:10px;
+      gap:8px;
+    }
+    .btn{
+      padding:8px 12px;
+      border-radius:8px;
+      font-weight:600;
+      font-size:0.9rem;
+      border:none;
+      cursor:pointer;
+    }
+    .btn-preview{
+      background:transparent;
+      color:#fff;
+      border:1px solid rgba(255,255,255,0.06);
+    }
+    .btn-use{
+      background:#ff5ca9;
+      color:#fff;
+      border:none;
+    }
+    .btn-use:hover{ filter:brightness(1.05); }
+
+    /* Accent bars & small decorations (each template gets a subtle accent) */
+    .accent-bar{ height:6px; border-radius:6px; background: #ddd; width:64px; margin-bottom:6px; }
+
+    /* modal */
+    .modal-backdrop{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,0.6);
+      display:flex; align-items:center; justify-content:center;
+      z-index:1200;
+      opacity:0; pointer-events:none;
+      transition: opacity 200ms ease;
+    }
+    .modal-backdrop.open{ opacity:1; pointer-events:auto; }
+    .modal{
+      width:min(980px,94%);
+      background:var(--card-white);
+      color:#111;
+      border-radius:12px;
+      padding:18px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.6);
+      transform: translateY(10px);
+      transition: transform 220ms ease;
+    }
+    .modal-backdrop.open .modal{ transform: translateY(0); }
+
+    .modal .modal-head{
+      display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:12px;
+    }
+    .modal .modal-head h3{ margin:0; font-size:1.05rem; }
+    .modal .modal-body{ display:flex; gap:16px; }
+    .modal .preview-large{
+      background: #fff; color:#111; border-radius:8px; padding:18px; flex:1;
+      border:1px solid var(--border);
+    }
+    .modal .modal-actions{ margin-top:12px; display:flex; justify-content:flex-end; gap:10px; }
+
+    /* small responsive */
+    @media (max-width:800px){
+      .thumb{ min-height:150px; }
+      .card{ padding:12px; }
+      .t-right{ display:none; }
+      .modal .modal-body{ flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <div>
+        <div class="brand">SonoaacResume</div>
+        <div class="lead">Black & White templates — subtle accents. Pick one and start building.</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:0.9rem; color:#ddd">Showing first <strong id="count">10</strong> templates</div>
+      </div>
+    </header>
+
+    <h1 class="page-title">Template previews — realistic mini resume thumbnails</h1>
+    <p class="lead">Click <strong>Preview</strong> for a larger mockup, or <strong>Use Template</strong> to open the builder with that template preselected.</p>
+
+    <div class="grid" id="grid"></div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modalBackdrop" class="modal-backdrop" role="dialog" aria-hidden="true" aria-labelledby="modalTitle">
+    <div class="modal" role="document">
+      <div class="modal-head">
+        <h3 id="modalTitle">Template preview</h3>
+        <button id="modalClose" class="btn btn-preview" aria-label="Close preview">Close</button>
+      </div>
+      <div class="modal-body">
+        <div id="modalPreview" class="preview-large"></div>
+      </div>
+      <div class="modal-actions">
+        <button id="modalUse" class="btn btn-use">Use Template</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* Templates data (first 10) */
+const templates = [
+  { id:'exec',   name:'Executive Classic',    category:'Corporate',  accent:'#dcdcdc', desc:'Two-column, serif header, neat experience grid' },
+  { id:'board',  name:'Boardroom Blackline',  category:'Corporate',  accent:'#bfbfbf', desc:'Strong horizontal rules and formal spacing' },
+  { id:'consult',name:'Consultant Edge',      category:'Corporate',  accent:'#c8d6e5', desc:'Timeline format, right sidebar for certs' },
+  { id:'lead',   name:'Leadership Layout',    category:'Corporate',  accent:'#d9cfcf', desc:'Emphasis on achievements, large name header' },
+  { id:'min',    name:'Corporate Minimalist', category:'Corporate',  accent:'#efefef', desc:'Whitespace focused, text-only elegance' },
+
+  { id:'retail', name:'Retail Rhythm',        category:'Retail',     accent:'#f0e7f6', desc:'Left column skills, right experience column' },
+  { id:'cust',   name:'Customer Focus',       category:'Retail',     accent:'#f3f3f3', desc:'Stat highlights and customer metrics area' },
+  { id:'service',name:'Service Smile',        category:'Retail',     accent:'#fff5f8', desc:'Rounded sections for friendliness' },
+  { id:'sales',  name:'Sales Drive',          category:'Retail',     accent:'#eef7fb', desc:'Metrics & bars to show KPIs' },
+  { id:'hosp',   name:'Hospitality Charm',    category:'Retail',     accent:'#f6f6f6', desc:'Grey highlighted summary; guest-focus' }
+];
+
+/* helper to create mini resume HTML (fake text + section titles) */
+function buildThumbHTML(t){
+  // small variations per template id for flavor
+  const accent = t.accent || '#efefef';
+  // Basic mini resume skeleton with fake names and headings
+  return `
+    <div style="display:flex;flex-direction:column;gap:6px;">
+      <div class="t-header">
+        <div>
+          <div class="t-name">Name Surname</div>
+          <div class="t-role">Senior ${t.category} Professional</div>
+        </div>
+        <div class="t-right">
+          <div class="accent-bar" style="background:${accent};"></div>
+          <div style="font-size:0.75rem;color:${'#6b6b6b'};margin-top:6px;">Location</div>
+        </div>
+      </div>
+
+      <div class="t-divider" style="background:${accent}; opacity:0.6;"></div>
+
+      <div>
+        <div class="t-section-title">Experience</div>
+        <div class="t-lines">
+          <div class="t-line"></div>
+          <div class="t-line short"></div>
+          <div class="t-line sm"></div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:6px;">
+        <div style="flex:1;">
+          <div class="t-section-title">Education</div>
+          <div class="t-lines">
+            <div class="t-line short"></div>
+            <div class="t-line sm"></div>
+          </div>
+        </div>
+        <div style="width:110px;">
+          <div class="t-section-title">Skills</div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px;">
+            <div class="t-line sm" style="width:100%;"></div>
+            <div class="t-line sm" style="width:80%;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* render gallery */
+const grid = document.getElementById('grid');
+templates.forEach(t => {
+  const c = document.createElement('div');
+  c.className = 'card';
+  c.innerHTML = `
+    <div class="meta">
+      <div class="name">${t.name}</div>
+      <div class="cat">${t.category}</div>
+    </div>
+    <div class="thumb" data-id="${t.id}" aria-hidden="true">
+      ${buildThumbHTML(t)}
+    </div>
+    <div class="card-footer">
+      <button class="btn btn-preview" data-preview="${t.id}">Preview</button>
+      <button class="btn btn-use" data-use="${t.id}">Use Template</button>
+    </div>
+  `;
+  grid.appendChild(c);
+});
+
+/* Modal logic */
+const modalBackdrop = document.getElementById('modalBackdrop');
+const modalPreview = document.getElementById('modalPreview');
+const modalTitle = document.getElementById('modalTitle');
+const modalClose = document.getElementById('modalClose');
+const modalUse = document.getElementById('modalUse');
+
+let selectedTemplate = null;
+
+document.addEventListener('click', (ev) => {
+  const previewBtn = ev.target.closest('[data-preview]');
+  const useBtn = ev.target.closest('[data-use]');
+  if(previewBtn){
+    const id = previewBtn.getAttribute('data-preview');
+    openPreview(id);
+  } else if(useBtn){
+    const id = useBtn.getAttribute('data-use');
+    goToBuilder(id);
+  }
+});
+
+function openPreview(id){
+  const t = templates.find(x=>x.id===id);
+  if(!t) return;
+  selectedTemplate = t;
+  modalTitle.textContent = `${t.name} — Preview`;
+  // larger mockup (reuse skeleton, but bigger)
+  modalPreview.innerHTML = `
+    <div style="display:flex;gap:18px;align-items:flex-start;">
+      <div style="flex:1;">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+          <div>
+            <div style="font-weight:700;font-size:1.2rem;">Name Surname</div>
+            <div style="color:#666;margin-top:4px;">Senior ${t.category} Professional</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="background:${t.accent};width:96px;height:10px;border-radius:8px;"></div>
+            <div style="color:#777;font-size:0.85rem;margin-top:8px;">Location • contact</div>
+          </div>
+        </div>
+
+        <div style="margin-top:6px;">
+          <div style="font-weight:700;color:#111;margin-bottom:8px;">Experience</div>
+          <div style="color:#444;line-height:1.5;">
+            • Company A — Role (2020–Present)<br>
+            • Company B — Role (2017–2020)<br>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div style="font-weight:700;color:#111;margin-bottom:8px;">Education</div>
+          <div style="color:#444;line-height:1.5;">
+            • University — Degree (Year)
+          </div>
+        </div>
+      </div>
+      <div style="width:260px;flex-shrink:0;">
+        <div style="background:#fafafa;padding:12px;border-radius:8px;border:1px solid var(--border);">
+          <div style="font-weight:700;margin-bottom:8px;">Skills</div>
+          <div style="color:#444;line-height:1.5;">
+            • Skill A<br>• Skill B<br>• Skill C
+          </div>
+        </div>
+
+        <div style="background:#fafafa;padding:12px;border-radius:8px;border:1px solid var(--border);margin-top:12px;">
+          <div style="font-weight:700;margin-bottom:8px;">Highlights</div>
+          <div style="color:#444;line-height:1.5;">
+            • Result 1<br>• Result 2
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  modalBackdrop.classList.add('open');
+  modalBackdrop.setAttribute('aria-hidden','false');
+}
+
+/* close */
+modalClose.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e)=>{
+  if(e.target === modalBackdrop) closeModal();
+});
+function closeModal(){
+  modalBackdrop.classList.remove('open');
+  modalBackdrop.setAttribute('aria-hidden','true');
+  selectedTemplate = null;
+}
+
+/* Use Template -> go to builder with query param */
+function goToBuilder(id){
+  // Replace with your builder path; this will open builder.html?template=ID
+  const url = `builder.html?template=${encodeURIComponent(id)}`;
+  window.location.href = url;
+}
+
+/* also wire modal "Use Template" button */
+modalUse.addEventListener('click', ()=>{
+  if(selectedTemplate) goToBuilder(selectedTemplate.id);
+});
+
+/* update count */
+document.getElementById('count').textContent = templates.length;
+</script>
+</body>
+</html>

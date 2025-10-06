@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Examples - Sonoaac Resume Builder</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      color: #f1f1f1;
+      background-color: #0d0d0d;
+      overflow-x: hidden;
+    }
+
+    /* Navbar */
+    header {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ff5ca9;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .nav-links a {
+      color: #f1f1f1;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ff5ca9;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 35px;
+      left: 0;
+      background-color: #111;
+      border-radius: 6px;
+      min-width: 220px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      z-index: 1;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content a {
+      display: block;
+      padding: 10px 15px;
+      color: #f1f1f1;
+      text-decoration: none;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background: #ff5ca9;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    /* Page Header */
+    .page-header {
+      padding: 100px 0 60px;
+      text-align: center;
+      background: linear-gradient(135deg, #000000, #1a1a1a);
+    }
+
+    .page-header h1 {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #fff;
+    }
+
+    .page-header p {
+      font-size: 1.2rem;
+      color: #ccc;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Examples Section */
+    .examples-section {
+      padding: 80px 0;
+      background: #0d0d0d;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 2rem;
+    }
+
+    .example-card {
+      background: #1a1a1a;
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid #333;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .example-card:hover {
+      transform: translateY(-10px);
+      border-color: #ff5ca9;
+      box-shadow: 0 20px 40px rgba(255, 92, 169, 0.2);
+    }
+
+    .example-preview {
+      height: 400px;
+      background: #fff;
+      color: #333;
+      padding: 1.5rem;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.4;
+      overflow: hidden;
+    }
+
+    /* Example-specific styles */
+    .software-engineer {
+      background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    }
+
+    .marketing-manager {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    }
+
+    .graphic-designer {
+      background: linear-gradient(135deg, #ff5ca9, #ff86c1);
+      color: #fff;
+    }
+
+    .sales-representative {
+      background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+      color: #fff;
+    }
+
+    .nurse {
+      background: linear-gradient(135deg, #ffffff, #f8f9fa);
+    }
+
+    .teacher {
+      background: linear-gradient(135deg, #fafafa, #ffffff);
+    }
+
+    .example-preview h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+
+    .example-preview .job-title {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+
+    .example-preview .section {
+      margin-bottom: 1rem;
+    }
+
+    .example-preview .section-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+
+    .example-preview .section-content {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .example-info {
+      padding: 1.5rem;
+    }
+
+    .example-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: #fff;
+    }
+
+    .example-info p {
+      color: #ccc;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .example-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
+    .example-tag {
+      background: #ff5ca9;
+      color: #fff;
+      padding: 0.3rem 0.8rem;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 500;
+    }
+
+    .example-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border-radius: 25px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      text-align: center;
+    }
+
+    .btn-primary {
+      background: #ff5ca9;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #ff86c1;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: #ff5ca9;
+      border: 2px solid #ff5ca9;
+    }
+
+    .btn-outline:hover {
+      background: #ff5ca9;
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    /* Industry Filter */
+    .filter-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 8px 16px;
+      border: 1px solid #333;
+      background: #1a1a1a;
+      color: #ccc;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active,
+    .filter-btn:hover {
+      background: #ff5ca9;
+      color: #fff;
+      border-color: #ff5ca9;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Sonoaac</div>
+      <div class="nav-links">
+        <div class="dropdown">
+          <a href="#">Features ▾</a>
+          <div class="dropdown-content">
+            <a href="builder.html">Resume Builder</a>
+            <a href="#">Cover Letter Builder</a>
+            <a href="#">Website Builder</a>
+            <a href="#">Career Map</a>
+          </div>
+        </div>
+        <a href="index.html">Home</a>
+        <a href="templates.html">Templates</a>
+        <a href="resume-examples.html">Resume Examples</a>
+        <a href="builder.html" class="btn btn-primary">Start Building</a>
+      </div>
+    </nav>
+  </header>
+
+  <section class="page-header">
+    <div class="container">
+      <h1>Resume Examples by Industry</h1>
+      <p>Get inspired by professional resume examples from different industries and career levels.</p>
+    </div>
+  </section>
+
+  <section class="examples-section">
+    <div class="container">
+      <div class="filter-section">
+        <div class="filter-buttons">
+          <button class="filter-btn active" data-filter="all">All Industries</button>
+          <button class="filter-btn" data-filter="tech">Technology</button>
+          <button class="filter-btn" data-filter="business">Business</button>
+          <button class="filter-btn" data-filter="creative">Creative</button>
+          <button class="filter-btn" data-filter="healthcare">Healthcare</button>
+          <button class="filter-btn" data-filter="education">Education</button>
+        </div>
+      </div>
+
+      <div class="examples-grid">
+        <!-- Software Engineer Example -->
+        <div class="example-card" data-category="tech">
+          <div class="example-preview software-engineer">
+            <h3>Sarah Johnson</h3>
+            <div class="job-title">Senior Software Engineer</div>
+            
+            <div class="section">
+              <div class="section-title">PROFESSIONAL SUMMARY</div>
+              <div class="section-content">Experienced full-stack developer with 6+ years building scalable web applications. Led teams of 5+ developers and delivered projects worth $2M+ in revenue.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">TECHNICAL SKILLS</div>
+              <div class="section-content">JavaScript, React, Node.js, Python, AWS, Docker, Kubernetes, PostgreSQL</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">KEY ACHIEVEMENTS</div>
+              <div class="section-content">• Improved application performance by 60%<br>• Led migration to microservices architecture<br>• Mentored 3 junior developers</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Software Engineer</h3>
+            <p>Tech-focused resume highlighting technical skills, project leadership, and quantifiable achievements in software development.</p>
+            <div class="example-tags">
+              <span class="example-tag">Technology</span>
+              <span class="example-tag">Senior Level</span>
+              <span class="example-tag">Full-Stack</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=modern" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Marketing Manager Example -->
+        <div class="example-card" data-category="business">
+          <div class="example-preview marketing-manager">
+            <h3>Michael Chen</h3>
+            <div class="job-title">Marketing Manager</div>
+            
+            <div class="section">
+              <div class="section-title">PROFESSIONAL SUMMARY</div>
+              <div class="section-content">Results-driven marketing professional with 8+ years experience in digital marketing, brand management, and team leadership.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">KEY ACHIEVEMENTS</div>
+              <div class="section-content">• Increased brand awareness by 45%<br>• Generated $5M+ in revenue through campaigns<br>• Managed $2M annual marketing budget</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">CORE COMPETENCIES</div>
+              <div class="section-content">Digital Marketing, SEO/SEM, Social Media, Analytics, Team Leadership, Budget Management</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Marketing Manager</h3>
+            <p>Results-driven resume showcasing campaign achievements, revenue impact, and leadership experience in marketing.</p>
+            <div class="example-tags">
+              <span class="example-tag">Business</span>
+              <span class="example-tag">Management</span>
+              <span class="example-tag">Digital Marketing</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=professional" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Graphic Designer Example -->
+        <div class="example-card" data-category="creative">
+          <div class="example-preview graphic-designer">
+            <h3>Alex Rivera</h3>
+            <div class="job-title">Senior Graphic Designer</div>
+            
+            <div class="section">
+              <div class="section-title">CREATIVE PORTFOLIO</div>
+              <div class="section-content">Award-winning designer with 7+ years creating visual identities for Fortune 500 companies and startups.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">DESIGN EXPERTISE</div>
+              <div class="section-content">Brand Identity, UI/UX Design, Print Design, Motion Graphics, Adobe Creative Suite</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">NOTABLE PROJECTS</div>
+              <div class="section-content">• Redesigned mobile app (2M+ users)<br>• Created brand identity for 20+ startups<br>• Won 3 design awards in 2023</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Graphic Designer</h3>
+            <p>Creative resume with portfolio integration, visual elements, and design achievements that stand out to creative agencies.</p>
+            <div class="example-tags">
+              <span class="example-tag">Creative</span>
+              <span class="example-tag">Design</span>
+              <span class="example-tag">Portfolio</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=creative" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sales Representative Example -->
+        <div class="example-card" data-category="business">
+          <div class="example-preview sales-representative">
+            <h3>Jennifer Martinez</h3>
+            <div class="job-title">Senior Sales Representative</div>
+            
+            <div class="section">
+              <div class="section-title">SALES PERFORMANCE</div>
+              <div class="section-content">Top-performing sales professional with 10+ years exceeding quotas and building lasting client relationships.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">SALES ACHIEVEMENTS</div>
+              <div class="section-content">• Exceeded annual quota by 35% for 3 consecutive years<br>• Generated $8M+ in new business<br>• Maintained 95% client retention rate</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">CORE SKILLS</div>
+              <div class="section-content">B2B Sales, CRM Management, Lead Generation, Client Relations, Negotiation, Territory Management</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Sales Representative</h3>
+            <p>Performance-focused resume with metrics, achievements, and sales results that demonstrate value to potential employers.</p>
+            <div class="example-tags">
+              <span class="example-tag">Sales</span>
+              <span class="example-tag">B2B</span>
+              <span class="example-tag">Performance</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=corporate" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Registered Nurse Example -->
+        <div class="example-card" data-category="healthcare">
+          <div class="example-preview nurse">
+            <h3>Dr. Sarah Williams</h3>
+            <div class="job-title">Registered Nurse</div>
+            
+            <div class="section">
+              <div class="section-title">CLINICAL EXPERTISE</div>
+              <div class="section-content">Compassionate healthcare professional with 8+ years providing patient care in emergency and critical care settings.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">CLINICAL EXPERIENCE</div>
+              <div class="section-content">• Emergency Department (5 years)<br>• ICU (3 years)<br>• Patient Care Coordinator (2 years)</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">CERTIFICATIONS</div>
+              <div class="section-content">BLS, ACLS, PALS, CCRN, Emergency Nursing Certification</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Registered Nurse</h3>
+            <p>Healthcare-focused resume emphasizing clinical experience, certifications, and patient care achievements.</p>
+            <div class="example-tags">
+              <span class="example-tag">Healthcare</span>
+              <span class="example-tag">Clinical</span>
+              <span class="example-tag">Certified</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=healthcare" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Teacher Example -->
+        <div class="example-card" data-category="education">
+          <div class="example-preview teacher">
+            <h3>Robert Thompson</h3>
+            <div class="job-title">High School Mathematics Teacher</div>
+            
+            <div class="section">
+              <div class="section-title">EDUCATION PHILOSOPHY</div>
+              <div class="section-content">Dedicated educator with 12+ years inspiring students and improving academic outcomes through innovative teaching methods.</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">TEACHING ACHIEVEMENTS</div>
+              <div class="section-content">• Improved student test scores by 25%<br>• Led after-school tutoring program<br>• Developed new curriculum for AP Calculus</div>
+            </div>
+
+            <div class="section">
+              <div class="section-title">EDUCATION & CERTIFICATIONS</div>
+              <div class="section-content">Master of Education, Mathematics Teaching License, AP Calculus Certification</div>
+            </div>
+          </div>
+          <div class="example-info">
+            <h3>Mathematics Teacher</h3>
+            <p>Education-focused resume highlighting teaching achievements, student outcomes, and educational qualifications.</p>
+            <div class="example-tags">
+              <span class="example-tag">Education</span>
+              <span class="example-tag">Teaching</span>
+              <span class="example-tag">Mathematics</span>
+            </div>
+            <div class="example-actions">
+              <a href="builder.html?template=elegant" class="btn btn-primary">Use This Style</a>
+              <a href="#" class="btn btn-outline">View Full Resume</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // Filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const exampleCards = document.querySelectorAll('.example-card');
+
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Update active button
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          this.classList.add('active');
+          
+          // Filter cards
+          exampleCards.forEach(card => {
+            if (filter === 'all' || card.getAttribute('data-category') === filter) {
+              card.style.display = 'block';
+            } else {
+              card.style.display = 'none';
+            }
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>

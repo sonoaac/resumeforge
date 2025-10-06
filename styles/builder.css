@@ -1,0 +1,490 @@
+/* Resume Builder Specific Styles */
+body {
+  padding-top: var(--header-height);
+}
+
+/* Builder Container */
+.builder-container {
+  min-height: calc(100vh - var(--header-height));
+  display: flex;
+  flex-direction: column;
+}
+
+/* Builder Toolbar */
+.builder-toolbar {
+  background: var(--bg-secondary);
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.toolbar-left h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.toolbar-right {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+/* Buttons */
+.btn {
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  border: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background: #f49ac1;
+  color: #000;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #e91e63;
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #1b1b1b;
+  color: #fff;
+  border: 1px solid #333;
+}
+
+.btn-secondary:hover {
+  background: #333;
+  border-color: #f49ac1;
+}
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #f49ac1;
+}
+
+.btn-outline:hover {
+  background: #f49ac1;
+  color: #000;
+}
+
+/* Main Content Area */
+.builder-main {
+  flex: 1;
+  display: flex;
+  min-height: calc(100vh - 80px);
+}
+
+/* Form Panel */
+.form-panel {
+  width: 45%;
+  min-width: 500px;
+  background: #1b1b1b;
+  border-right: 1px solid #333;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-header {
+  padding: 30px;
+  border-bottom: 1px solid #333;
+  background: #0e0e0e;
+}
+
+.form-header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.form-header h2 i {
+  color: #f49ac1;
+  font-size: 1.2rem;
+}
+
+.template-selector {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.template-selector label {
+  font-weight: 600;
+  color: #fff;
+  font-size: 0.9rem;
+}
+
+.template-selector select {
+  padding: 10px 15px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.template-selector select:focus {
+  outline: none;
+  border-color: #f49ac1;
+  box-shadow: 0 0 0 3px rgba(244, 154, 193, 0.2);
+}
+
+.template-selector select option {
+  background: #1b1b1b;
+  color: #fff;
+}
+
+/* Form Content */
+.form-content {
+  flex: 1;
+  padding: 30px;
+}
+
+.form-section {
+  margin-bottom: 30px;
+  background: #0e0e0e;
+  border-radius: 8px;
+  padding: 25px;
+  border: 1px solid #333;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-section h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.form-section h3 i {
+  color: #f49ac1;
+  font-size: 1rem;
+}
+
+/* Form Groups */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #1b1b1b;
+  color: #fff;
+  font-size: 0.9rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #666;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #f49ac1;
+  box-shadow: 0 0 0 3px rgba(244, 154, 193, 0.2);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 100px;
+  line-height: 1.5;
+}
+
+.form-group small {
+  display: block;
+  margin-top: 8px;
+  color: #666;
+  font-size: 0.8rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+/* Dynamic Items */
+.experience-item,
+.education-item {
+  background: #1b1b1b;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.experience-item:hover,
+.education-item:hover {
+  background: #333;
+  border-color: #f49ac1;
+}
+
+.remove-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: #e91e63;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.remove-btn:hover {
+  background: #c2185b;
+  transform: scale(1.05);
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+.checkbox-group label {
+  margin: 0;
+  font-weight: normal;
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+/* Preview Panel */
+.preview-panel {
+  flex: 1;
+  background: #0e0e0e;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.preview-panel.collapsed {
+  width: 0;
+  min-width: 0;
+  flex: 0;
+  overflow: hidden;
+}
+
+.preview-header {
+  padding: 30px;
+  border-bottom: 1px solid #333;
+  background: #1b1b1b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-header h2 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.preview-header h2 i {
+  color: #f49ac1;
+  font-size: 1.2rem;
+}
+
+.preview-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.preview-container {
+  flex: 1;
+  padding: 30px;
+  overflow-y: auto;
+  background: #0e0e0e;
+}
+
+/* Resume Preview */
+.resume-preview {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: #333;
+  line-height: 1.6;
+  transform: scale(0.9);
+  transform-origin: top center;
+  width: 111.11%;
+  min-height: 800px;
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  border: 1px solid #333;
+}
+
+/* Template-specific styles for resume preview */
+.modern .resume-preview {
+  border: 2px solid #f49ac1;
+}
+
+.creative .resume-preview {
+  border: 2px solid #f49ac1;
+}
+
+.professional .resume-preview {
+  border: 2px solid #000;
+}
+
+.minimal .resume-preview {
+  border: 1px solid #ddd;
+}
+
+.corporate .resume-preview {
+  border: 3px solid #000;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .form-panel {
+    min-width: 400px;
+  }
+}
+
+@media (max-width: 992px) {
+  .builder-main {
+    flex-direction: column;
+  }
+
+  .form-panel {
+    width: 100%;
+    min-width: unset;
+    border-right: none;
+    border-bottom: 1px solid #333;
+  }
+
+  .preview-panel {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .resume-preview {
+    transform: scale(1);
+    width: 100%;
+    padding: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .builder-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+
+  .form-header {
+    padding: 20px;
+  }
+
+  .form-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .form-content {
+    padding: 20px;
+  }
+
+  .form-section {
+    padding: 20px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-header {
+    padding: 20px;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .preview-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .preview-container {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    padding: 8px 15px;
+    font-size: 0.8rem;
+  }
+
+  .form-header,
+  .form-content,
+  .form-section,
+  .preview-header,
+  .preview-container {
+    padding: 15px;
+  }
+
+  .resume-preview {
+    padding: 15px;
+  }
+}
