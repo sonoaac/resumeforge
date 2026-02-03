@@ -1,0 +1,386 @@
+Good. Now we define the **Builder Flow**
+This is the step by step path the user walks through to create a resume.
+
+This flow is what makes the app feel simple instead of overwhelming.
+
+Pure text.
+Concept only.
+No code.
+No symbols.
+
+---
+
+BUILDER FLOW OVERVIEW
+
+User always moves through the resume in a logical order
+
+Welcome
+Template Selection
+Profile
+Summary
+Experience
+Education
+Skills
+Projects
+Optional Sections
+Review
+Export
+
+They can go forward or backward at any time.
+
+Progress is auto saved.
+
+---
+
+STEP ONE
+WELCOME STEP
+
+Purpose
+Make the user start immediately
+
+What they see
+Create Your Resume
+Choose a format to begin
+
+Actions
+Start New Resume
+Continue Existing Resume
+
+System behavior
+Creates a new empty resume object
+Sends user to template selection
+
+---
+
+STEP TWO
+TEMPLATE SELECTION
+
+Purpose
+Let user visually choose style
+
+What they see
+Grid of resume formats
+Each shows name and preview
+
+Example names
+Classic One
+Modern Prime
+Executive Two
+Creative Wave
+Tech Matrix
+Minimal Zen
+
+Actions
+Click a format
+Preview larger
+Select and continue
+
+System behavior
+Saves chosen format
+Moves to profile step
+
+---
+
+STEP THREE
+PROFILE STEP
+
+Purpose
+Collect identity information
+
+Fields shown
+Full Name
+Professional Title
+Email
+Phone
+City
+State
+Country
+LinkedIn
+Portfolio
+
+Optional
+Profile photo
+
+User experience
+Live preview updates instantly
+Validation checks
+Email must look like email
+Phone must look like phone
+
+Continue button
+Next to Summary
+
+---
+
+STEP FOUR
+SUMMARY STEP
+
+Purpose
+Create professional overview
+
+Fields shown
+Headline optional
+Summary text
+
+Helper text
+Two to four sentences recommended
+
+Preview behavior
+Summary appears at top of resume
+
+Buttons
+Back
+Next
+
+---
+
+STEP FIVE
+EXPERIENCE STEP
+
+Purpose
+Build job history
+
+User actions
+Add job
+Edit job
+Delete job
+Reorder jobs
+
+Each job form includes
+Job Title
+Company Name
+Location
+Start Date
+End Date
+Current job toggle
+Description bullets
+
+Guidance text
+Use action verbs
+List achievements
+
+System behavior
+Experience sorted newest first
+
+---
+
+STEP SIX
+EDUCATION STEP
+
+Purpose
+Add academic history
+
+User actions
+Add education
+Edit education
+Delete education
+
+Each education entry includes
+Degree
+Field of Study
+School Name
+Location
+Dates
+Current study toggle
+
+Optional
+Honors
+Grade
+
+Preview behavior
+Education section updates live
+
+---
+
+STEP SEVEN
+SKILLS STEP
+
+Purpose
+Show abilities quickly
+
+User actions
+Add skill
+Remove skill
+Reorder skills
+
+Each skill entry
+Skill name
+Skill level
+
+Optional
+Category such as Technical or Soft
+
+Preview behavior
+Skills appear as list or columns depending on format
+
+---
+
+STEP EIGHT
+PROJECTS STEP
+
+Purpose
+Support technical and creative users
+
+User actions
+Add project
+Edit project
+Delete project
+
+Each project includes
+Project name
+Role
+Description
+Tools
+Link
+
+Optional
+Outcome
+
+Preview behavior
+Appears under experience or skills depending on format
+
+---
+
+STEP NINE
+OPTIONAL SECTIONS
+
+Purpose
+Allow customization
+
+User can add
+Certifications
+Awards
+Languages
+Volunteer Work
+Custom sections
+
+Each custom section includes
+Section title
+Entries
+
+User controls
+Show or hide sections
+Reorder sections
+
+---
+
+STEP TEN
+REVIEW STEP
+
+Purpose
+Quality control
+
+What user sees
+Full resume preview
+Section checklist
+
+System checks
+Missing contact info
+No summary
+Too few bullets
+Date format issues
+
+User actions
+Edit section
+Continue to export
+
+---
+
+STEP ELEVEN
+EXPORT STEP
+
+Purpose
+Monetization
+
+What user sees
+Export options
+
+Free user
+Download PDF with watermark
+
+Paid options
+Remove watermark
+Download PDF
+Download DOCX
+
+Buttons
+Pay with PayPal
+Upgrade to Pro
+
+After payment
+Unlock export
+Generate file
+Provide download links
+
+---
+
+BUILDER EXPERIENCE RULES
+
+Auto save every change
+No page reloads
+Preview always visible
+User can switch formats anytime
+Data never resets
+
+---
+
+WHY THIS FLOW WORKS
+
+It matches how humans think
+
+Who am I
+What do I do
+Where did I work
+What can I do
+Show it nicely
+Download it
+
+No confusion
+No clutter
+No technical language
+
+---
+
+ADVANCED FLOW LATER
+
+After MVP you can add
+
+Job description paste step
+ATS feedback step
+Cover letter step
+Multiple resume versions
+
+But MVP stops at export.
+
+---
+
+SUMMARY
+
+The builder flow is
+
+Template
+Profile
+Summary
+Experience
+Education
+Skills
+Projects
+Optional sections
+Review
+Export
+
+Each step edits the same resume object
+Each format reads the same data
+Only layout changes
+
+This is what makes your system scalable.
+
+---
+
+Next logical step
+Define the EXPORT AND PAYMENT GATE logic
+Meaning exactly when users are blocked and how access is unlocked.
+
+If you want that next, say:
+
+Define the payment and export gate logic

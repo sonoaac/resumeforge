@@ -1,0 +1,262 @@
+Good. Now we define the **Payment and Export Gate Logic**
+This is the rule system that decides **who can download what** and **when PayPal appears**.
+
+Pure text.
+Concept only.
+No code.
+No symbols.
+
+---
+
+PAYMENT AND EXPORT GATE LOGIC
+
+This system controls access to exports based on user status.
+
+There are three user states
+
+Free User
+One Time Buyer
+Pro Subscriber
+
+The system always checks state before allowing export.
+
+---
+
+FREE USER RULES
+
+What they can do
+
+Create one resume
+Use free formats
+Edit all sections
+Preview fully
+Export PDF with watermark
+
+What they cannot do
+
+Export without watermark
+Export Docx
+Use premium formats
+Create multiple resumes
+
+When they click Export
+
+They see two options
+
+Download with watermark
+Upgrade to remove watermark
+
+If they choose upgrade
+
+They are sent to PayPal checkout
+
+---
+
+ONE TIME BUYER RULES
+
+What they can do
+
+Export one resume
+No watermark
+PDF and Docx available
+Use premium formats for that resume
+
+What they cannot do
+
+Create unlimited resumes
+Export unlimited times
+Access Pro only features
+
+System behavior
+
+After payment
+Their resume is marked as paid
+Export is unlocked for that resume
+They can download files
+
+Once used
+System tracks export count
+If they reach limit
+They are prompted to upgrade to Pro
+
+---
+
+PRO SUBSCRIBER RULES
+
+What they can do
+
+Create unlimited resumes
+Use all formats
+Export unlimited times
+PDF and Docx
+Access cover letter builder
+Duplicate resumes
+Access ATS tools
+
+What they cannot do
+
+Nothing related to resumes
+
+System behavior
+
+As long as subscription is active
+Export is always allowed
+Premium formats are always unlocked
+
+If subscription ends
+
+User is downgraded to Free
+Premium formats are locked
+Export becomes watermark only
+
+---
+
+PAYPAL PAYMENT FLOW
+
+One time purchase flow
+
+User clicks Remove Watermark
+System creates PayPal order
+User pays
+PayPal confirms payment
+System marks resume as paid
+Export becomes available
+
+Subscription flow
+
+User clicks Upgrade to Pro
+System creates PayPal subscription
+User approves
+PayPal confirms subscription
+System marks user as Pro
+All features unlock
+
+---
+
+SECURITY RULE
+
+The system never trusts the frontend
+
+It only unlocks export when
+
+PayPal confirms payment
+Or
+PayPal confirms subscription is active
+
+If confirmation is missing
+Export is blocked
+
+---
+
+EXPORT TYPES
+
+PDF Export
+Free version includes watermark
+Paid version has no watermark
+
+Docx Export
+Always paid only
+
+Public Link Export
+Allowed for Pro only
+
+---
+
+PAYMENT FAILURE HANDLING
+
+If payment fails
+
+User sees message
+Payment failed
+Try again
+
+Resume data is never deleted
+User can retry payment
+
+---
+
+REFUND AND DOWNGRADE LOGIC
+
+If user requests refund
+
+One time buyer
+Export access is removed
+
+Pro subscriber
+Subscription is cancelled
+Access removed at end of billing period
+
+---
+
+UPGRADE PATHS
+
+Free to One Time
+Allowed
+
+Free to Pro
+Allowed
+
+One Time to Pro
+Allowed
+
+Pro to Free
+Only if subscription ends
+
+System always offers Pro as best value
+
+---
+
+WHEN PAYPAL APPEARS
+
+PayPal appears only when user tries to
+
+Remove watermark
+Download Docx
+Use premium format
+Export public resume link
+
+Normal editing never shows PayPal
+
+This keeps friction low
+Payment only happens at high intent
+
+---
+
+USER EXPERIENCE RULES
+
+Never block editing
+Never delete data
+Only block exporting
+Always explain why
+Always show upgrade option
+
+---
+
+SUMMARY
+
+Editing is always free
+Preview is always free
+Payment only gates export and premium formats
+
+Free users
+Watermark only
+
+One time buyers
+One resume export
+
+Pro subscribers
+Unlimited
+
+PayPal controls all upgrades
+System verifies every payment
+Export unlocks only after confirmation
+
+---
+
+Next logical step
+Define the TEMPLATE SYSTEM behavior
+Meaning how formats interact with resume data and how switching formats works.
+
+If you want that next, say
+
+Define the template system behavior

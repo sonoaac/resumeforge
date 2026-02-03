@@ -1,0 +1,175 @@
+You’re not missing anything major, but for a Replit beta I’d adjust a few things so you can ship faster, avoid scope traps, and still keep the product looking “real.” Here’s what I’d change or add, strictly as planning.
+
+What I would change for the beta
+1) Cut the template count for beta display
+
+Keep the “60 templates” promise, but for beta:
+
+Show 12 to 18 templates fully designed
+
+The rest can be “Coming Soon” cards (still named, still grouped)
+
+Reason: 60 real templates is a design project by itself. You want the beta proving the funnel and export flow, not perfect variety.
+
+2) Make DOCX export Pro only at beta
+
+For beta:
+
+Free: watermarked PDF
+
+One time: clean PDF
+
+Pro: clean PDF + DOCX
+
+Reason: DOCX generation adds complexity and edge cases. Make it a Pro-only milestone so you can launch faster.
+
+3) Simplify navigation menus for beta
+
+Dropdown menus are nice, but for beta they slow you down.
+Do:
+
+Templates
+
+Pricing
+
+Builder
+
+Dashboard
+
+Login
+
+Add the full dropdown system later.
+
+4) Reduce wizard steps in UI without removing structure
+
+Keep your 11-step logic internally, but in UI you can combine:
+
+Optional Sections + Review into one “Finalize” step
+
+Welcome can be merged into Template Selection
+
+Users still get the same result, but the build is easier.
+
+What I would add (important)
+5) Add onboarding and a default sample resume
+
+On first open of builder:
+
+Pre-fill with a sample resume
+
+Show “Replace with your info”
+
+This massively increases completion rate.
+
+6) Add a resume title and duplicate feature
+
+In the dashboard:
+
+Rename resume
+
+Duplicate resume
+
+This is simple but makes the app feel premium and “real.”
+
+7) Add export receipt and billing status page
+
+Under Settings:
+
+Current plan
+
+Last payment
+
+Manage subscription link
+
+Export history
+
+Even if minimal, it reduces support issues.
+
+8) Add basic anti abuse controls
+
+Because it’s Replit beta:
+
+Rate limit export attempts
+
+Block rapid repeated PayPal order creation
+
+Prevent public share links from being indexed (beta privacy)
+
+9) Add public share link as Pro only
+
+This is a clean upsell:
+
+Free: no public link
+
+One time: optional or no
+
+Pro: yes
+
+Replit specific checks you should keep in mind
+10) Confirm PDF generation approach
+
+In Replit you want a stable PDF generation method. Plan for:
+
+Server-side PDF creation
+
+Store export files with a short expiry or save them in DB storage metadata
+
+Just make sure you’re not relying on something that breaks in Replit’s environment.
+
+11) Environment configuration list
+
+Add a small plan section that lists required secrets:
+
+Database URL
+
+Replit Auth variables
+
+PayPal client ID and secret
+
+Webhook secret
+
+App base URL
+
+This prevents deployment headaches.
+
+Keep exactly as written (these are your “must-haves”)
+
+Replit Auth
+
+Split-screen live preview
+
+Auto-save
+
+PDF export with watermark
+
+PayPal one-time + subscription
+
+Dashboard
+
+Basic ATS checklist
+
+PostgreSQL
+
+Those are the core of your money engine.
+
+Final beta scope I recommend (fastest path)
+
+If you want the tightest version that still sells:
+
+12 to 18 templates
+
+Wizard + live preview
+
+Auto-save
+
+Export gate + PayPal
+
+Watermarked PDF free, clean PDF paid, DOCX Pro only
+
+Dashboard + duplicate
+
+ATS checklist
+
+That beta is enough to start collecting payments and feedback.
+
+If you want, paste your “no hyphen rule” again as a hard constraint and I’ll rewrite the template names, page slugs, and UI labels so nothing anywhere uses that character.

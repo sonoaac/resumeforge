@@ -1,0 +1,336 @@
+Perfect. Now we define the **one true resume structure** that ALL your formats use.
+This is the backbone of your whole app.
+No matter which format they pick, it pulls from this same structure.
+
+This is **purely textual and conceptual**.
+No code.
+No symbols.
+No hyphens.
+
+---
+
+RESUME DATA STRUCTURE
+Single Resume Object
+
+A resume is made of these main parts
+
+Profile
+Summary
+Experience
+Education
+Skills
+Projects
+Certifications
+Awards
+Languages
+References
+Custom Sections
+
+Each part has its own internal fields.
+
+---
+
+PROFILE SECTION
+
+This is the identity of the resume.
+
+Full Name
+Professional Title
+Email
+Phone Number
+City
+State
+Country
+LinkedIn Link
+Portfolio Link
+Website Link
+
+Optional
+Profile Photo
+Nationality
+
+---
+
+SUMMARY SECTION
+
+This is a short paragraph or two.
+
+Summary Text
+Optional Headline
+Optional Career Goal
+
+Rules
+Maximum four sentences
+No bullet points
+Plain text only
+
+---
+
+EXPERIENCE SECTION
+
+This is a repeating group.
+User can add unlimited jobs.
+
+Each job contains
+
+Job Title
+Company Name
+Company Location
+Start Date
+End Date
+Is Current Job true or false
+
+Description Bullets
+Bullet One
+Bullet Two
+Bullet Three
+Bullet Four
+Bullet Five
+
+Optional
+Industry
+Employment Type
+Achievements
+
+---
+
+EDUCATION SECTION
+
+This is also repeating.
+
+Each education entry contains
+
+Degree
+Field of Study
+School Name
+School Location
+Start Date
+End Date
+Is Current Study true or false
+
+Optional
+Grade
+Honors
+Relevant Coursework
+
+---
+
+SKILLS SECTION
+
+This is a list group.
+
+Each skill contains
+
+Skill Name
+Skill Level
+Beginner
+Intermediate
+Advanced
+Expert
+
+Optional
+Years of Experience
+Category such as Technical or Soft
+
+---
+
+PROJECTS SECTION
+
+This is repeating.
+
+Each project contains
+
+Project Name
+Project Role
+Project Description
+Start Date
+End Date
+Tools Used
+Project Link
+
+Optional
+Team Size
+Outcome
+
+---
+
+CERTIFICATIONS SECTION
+
+Repeating entries.
+
+Each certification contains
+
+Certification Name
+Issuing Organization
+Issue Date
+Expiration Date
+Credential Link
+
+---
+
+AWARDS SECTION
+
+Repeating entries.
+
+Each award contains
+
+Award Name
+Awarding Body
+Date Received
+Description
+
+---
+
+LANGUAGES SECTION
+
+Repeating entries.
+
+Each language contains
+
+Language Name
+Proficiency
+Basic
+Conversational
+Fluent
+Native
+
+---
+
+REFERENCES SECTION
+
+Repeating entries.
+
+Each reference contains
+
+Reference Name
+Company
+Position
+Email
+Phone
+
+Visibility Rule
+Hidden by default
+Only shown if user enables
+
+---
+
+CUSTOM SECTIONS
+
+User can create their own section.
+
+Each custom section has
+
+Section Title
+Entries
+
+Each entry has
+
+Entry Title
+Entry Description
+Entry Dates
+
+Examples
+Volunteer Work
+Publications
+Hobbies
+Military Service
+Leadership
+
+---
+
+GLOBAL RESUME METADATA
+
+These are not visible but control behavior.
+
+Resume Title
+Template Selected
+Last Updated Date
+Is Public true or false
+Share Link Code
+Export Count
+Owner User Id
+
+---
+
+SECTION ORDER CONTROL
+
+Formats can change the order but never the structure.
+
+Possible orders
+
+Profile
+Summary
+Experience
+Education
+Skills
+Projects
+Certifications
+Awards
+Languages
+References
+Custom Sections
+
+Example
+Modern format may put Skills above Experience
+Classic format puts Experience first
+
+Data stays the same.
+Only layout changes.
+
+---
+
+WHAT MAKES THIS STRUCTURE POWERFUL
+
+One resume works for
+
+PDF export
+Docx export
+Public resume page
+Any of your 60 formats
+ATS checking
+Future AI rewriting
+Future job matching
+
+You never rewrite data logic.
+You only design new visual formats.
+
+---
+
+WHAT USERS SEE
+
+They see a form that asks for
+
+Name
+Job history
+Education
+Skills
+Projects
+
+They never see this structure.
+They just fill it in naturally.
+
+---
+
+SUMMARY
+
+One resume
+One data structure
+Many visual formats
+Unlimited expansion
+Stable foundation
+
+This makes your app
+
+Scalable
+Maintainable
+Monetizable
+Professional
+
+---
+
+Next logical step after this would be to define the **Builder Flow**
+meaning the exact order the user fills this in step by step.
+
+If you want that next, say:
+
+Define the builder flow

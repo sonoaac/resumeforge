@@ -1,0 +1,314 @@
+Perfect. Now we define the **Template System Behavior**
+This explains how resume formats work behind the scenes and how users interact with them.
+
+Pure text.
+Concept only.
+No code.
+No symbols.
+
+---
+
+TEMPLATE SYSTEM PURPOSE
+
+Templates control how a resume looks.
+They do not change what data exists.
+They only change how the same data is displayed.
+
+All templates read from the same resume structure.
+
+---
+
+WHAT A TEMPLATE CONTAINS
+
+Each template defines
+
+Font family
+Font sizes
+Line spacing
+Section spacing
+Header style
+Name placement
+Color accents
+Column layout
+Section order
+Bullet style
+Divider style
+
+A template never defines new data fields.
+It only decides where existing data appears.
+
+---
+
+TEMPLATE TYPES
+
+There are two template categories
+
+Free templates
+Premium templates
+
+Free templates are available to all users.
+Premium templates are locked behind payment.
+
+---
+
+TEMPLATE FAMILY GROUPS
+
+Templates are grouped for browsing
+
+Classic
+Modern
+Professional
+Creative
+Technical
+Minimal
+
+Each family has multiple named formats such as
+
+Classic One
+Modern Prime
+Executive Two
+Creative Wave
+Tech Matrix
+Minimal Zen
+
+---
+
+TEMPLATE SELECTION BEHAVIOR
+
+When user selects a template
+
+The resume content does not change
+Only the visual layout updates
+
+System behavior
+
+Save selected template
+Render resume using that template
+Keep all text and sections intact
+
+User can switch templates at any time
+No data is lost
+No re entry is required
+
+---
+
+TEMPLATE LOCKING RULES
+
+If user selects a premium template
+
+And user is Free
+
+They can preview the template
+But cannot export it
+They see a message
+Upgrade to use this format
+
+If user is One Time Buyer
+
+They can use premium template only for the paid resume
+
+If user is Pro Subscriber
+
+They can use all templates freely
+
+---
+
+SECTION ORDER LOGIC
+
+Templates may reorder sections automatically
+
+Example
+
+Classic format
+Profile
+Summary
+Experience
+Education
+Skills
+
+Modern format
+Profile
+Skills
+Experience
+Projects
+Education
+
+The resume data stays the same
+Only display order changes
+
+---
+
+COLUMN BEHAVIOR
+
+Templates define layout style
+
+One column layout
+Two column layout
+Header band layout
+
+User does not manually choose columns
+Template decides this
+
+---
+
+COLOR RULES
+
+Each template has default colors
+
+Black
+Gray
+Navy
+Accent color
+
+User may later customize colors
+But template has base palette
+
+ATS safe templates use only black and white
+
+Creative templates use accents
+
+---
+
+FONT RULES
+
+Each template defines
+
+Primary font
+Header font
+Body font
+
+Examples conceptually
+
+Professional fonts
+Clean fonts
+Modern fonts
+
+User does not need to pick fonts
+They pick template instead
+
+---
+
+RESPONSIVE BEHAVIOR
+
+Templates adapt to screen size
+
+Desktop view shows full layout
+Mobile view stacks columns
+Preview always readable
+
+Export uses desktop layout only
+
+---
+
+PUBLIC RESUME PAGE BEHAVIOR
+
+When user shares resume
+
+Public page uses same template
+Same section order
+Same colors
+Same fonts
+
+It becomes a live version of the resume
+
+---
+
+EXPORT BEHAVIOR WITH TEMPLATES
+
+When exporting
+
+System takes resume data
+Applies selected template
+Generates document
+
+Free export
+Template applies
+Watermark added
+
+Paid export
+Template applies
+No watermark
+
+---
+
+TEMPLATE METADATA
+
+Each template has hidden information
+
+Template name
+Template family
+Is premium true or false
+Best for tag
+Business
+Student
+Designer
+Developer
+Executive
+
+This helps filtering and search
+
+---
+
+TEMPLATE PREVIEW SYSTEM
+
+Templates show preview cards
+
+Preview uses sample resume data
+Not user data
+
+This lets user see layout style
+Before applying
+
+---
+
+ADDING NEW TEMPLATES LATER
+
+New templates do not require new resume fields
+They only define new layouts
+
+To add a template you define
+
+Layout rules
+Spacing
+Fonts
+Section order
+
+It plugs into system automatically
+
+---
+
+WHAT TEMPLATES NEVER DO
+
+They never
+
+Change resume content
+Delete sections
+Require new fields
+Store data
+
+They only render
+
+---
+
+SUMMARY
+
+Resume data is permanent
+Templates are visual skins
+User can switch freely
+Payment controls export
+System scales infinitely
+
+One resume
+Many formats
+No duplication
+No chaos
+
+---
+
+Next logical step
+Define the ATS CHECK SYSTEM
+Meaning what rules the app uses to analyze resumes and give feedback.
+
+If you want that next, say
+
+Define the ATS check system

@@ -1,0 +1,302 @@
+Got you — **pure text plan only**, no code.
+
+---
+
+## Resume Builder App Plan (Text-Only Master Plan)
+
+### Goal
+
+Build a resume builder that reliably converts job seekers into paying users by putting the paywall on **exports + premium templates**, using **PayPal** as the main checkout (PayPal balance + cards).
+
+---
+
+## 1) What You’re Building
+
+A web app that lets users:
+
+* pick a template
+* fill in resume sections with a guided step-by-step form
+* see a live preview
+* export as PDF (and DOCX for paid)
+* optionally share a public resume link
+
+---
+
+## 2) Core Audience (Who Pays Fast)
+
+People actively applying right now:
+
+* recent graduates
+* career switchers
+* people who keep getting rejected
+* people who need “one clean resume” quickly
+
+These users pay because they’re in urgency mode.
+
+---
+
+## 3) Business Model (Designed for $500/week)
+
+You need income that’s not random. This is the structure:
+
+### Plans
+
+**Free**
+
+* 1 resume
+* basic templates only
+* PDF export has a watermark
+* no DOCX export
+
+**One-time**
+
+* $14.99 “Export Pack”
+* removes watermark
+* allows PDF + DOCX export for that resume (or limited exports)
+
+**Pro Subscription**
+
+* $9.99/month
+* unlimited resumes
+* premium templates
+* no watermark
+* PDF + DOCX export
+* cover letter builder (Pro)
+* duplicate resume for each job posting (Pro)
+
+### Why this converts
+
+* Free users still get value
+* They only hit payment when they need the thing they truly want: **export**
+* One-time option catches people who hate subscriptions
+* Subscription stacks and becomes predictable over time
+
+---
+
+## 4) PayPal Payment Approach (Main Checkout)
+
+PayPal is the only payment platform.
+
+PayPal supports:
+
+* PayPal balance
+* debit/credit cards (guest checkout)
+* subscriptions + one-time payments
+
+### Payment Rule
+
+The app never “trusts” a payment screenshot or the frontend.
+Only these count:
+
+* PayPal payment capture confirmation (one-time)
+* PayPal subscription active confirmation (recurring)
+
+---
+
+## 5) User Journey (The Funnel)
+
+This is the exact flow that makes money:
+
+1. User lands on your site
+2. They click “Start Resume”
+3. They pick a template (free templates visible)
+4. They fill out resume using a simple wizard
+5. They see their resume preview looking professional
+6. They press “Export”
+7. App says:
+
+   * Free: watermark PDF available
+   * Want clean export + DOCX? Pay with PayPal
+8. They pay
+9. They export instantly
+10. They save account + come back later
+
+This is the reliable conversion moment.
+
+---
+
+## 6) Pages You Need (Minimum Set)
+
+### Public
+
+* Landing page (value + examples + “Start” button)
+* Templates page (gallery previews)
+* Pricing page (free vs one-time vs pro)
+* Login/Signup
+
+### App (Logged in)
+
+* Dashboard (list resumes + create new)
+* Builder (wizard + preview)
+* Export screen (paywall + download links)
+* Settings (plan info + billing)
+
+Optional:
+
+* Public share page if user enables it
+
+---
+
+## 7) Resume Builder Sections (MVP)
+
+Keep it lean but complete:
+
+* Contact (name, email, phone, city/state, LinkedIn, portfolio)
+* Professional Summary (2–4 lines)
+* Experience (job title, company, location, dates, bullet points)
+* Education (degree, school, dates)
+* Skills (tags)
+* Projects (optional but good)
+
+This covers 95% of users.
+
+---
+
+## 8) Templates Plan (Simple + Scalable)
+
+Templates are “skins,” not separate resume formats.
+
+### MVP templates
+
+* Modern (clean, popular)
+* Classic ATS (simple, safe)
+* Minimal (one-column)
+
+### Premium templates (Pro)
+
+* Executive
+* Creative
+* Tech-focused
+* Two-column (optional, some ATS issues—label as “Designer template”)
+
+Each template uses the same resume data but renders differently.
+
+---
+
+## 9) Export Plan (What Users Pay For)
+
+**Export is your main money button.**
+
+* Free export: PDF with watermark (“Made with ResumeForge”)
+* Paid export:
+
+  * PDF no watermark
+  * DOCX export
+  * optional: matching cover letter export
+
+Export should feel instant:
+
+* “Generate”
+* “Download PDF”
+* “Download DOCX”
+
+---
+
+## 10) ATS Value (Light but Real)
+
+You don’t need a complex AI to provide ATS help.
+
+MVP ATS checks:
+
+* Missing contact info
+* No summary (suggest adding one)
+* Too few bullet points in experience
+* Bad date formatting
+* Overly long paragraphs
+* Uncommon headings (recommend standard ones)
+
+Pro ATS upgrade:
+
+* Paste job description → highlight missing keywords
+
+---
+
+## 11) Data You Store (Conceptually)
+
+You store:
+
+* user account
+* resume JSON data (all fields)
+* selected template
+* export history
+* payment status (free / one-time / pro)
+
+Key concept:
+**One resume = one saved JSON object**
+Templates just “display” it.
+
+---
+
+## 12) Feature Boundaries (So It Launches Fast)
+
+### Must-have for MVP launch:
+
+* login/signup
+* create resume
+* edit resume in wizard
+* live preview
+* template selection (3)
+* PDF export (watermark)
+* PayPal one-time purchase to remove watermark
+* PayPal subscription to unlock Pro
+* download paid export
+
+### Not needed before launch:
+
+* AI writing
+* job board integrations
+* interview tracker
+* fancy animations
+
+Launch first. Upgrade later.
+
+---
+
+## 13) Promotion Strategy (Since you’re willing to promote)
+
+You already have the advantage: **content**.
+
+### Daily TikTok content formula (fast conversion)
+
+* “Fix your resume in 60 seconds” (show before/after)
+* “ATS resume template free”
+* “3 bullet points that get interviews”
+* “Comment ‘resume’ and I’ll review yours” (drives traffic)
+
+### Funnel:
+
+TikTok → landing page → builder → export paywall → PayPal → money
+
+---
+
+## 14) Weekly Money Strategy (Making $500/week Real)
+
+You combine 2 streams:
+
+1. **One-time Export Pack buyers**
+2. **Monthly Pro subscribers**
+
+Example weekly targets:
+
+* 20 export packs/week × $14.99 ≈ $300/week
+* 20 Pro subs/week × $9.99 ≈ $200/week recurring momentum
+  That’s your $500/week shape, and it grows because subs stay.
+
+---
+
+## 15) The “Launch Like a Business” Rule
+
+You do not wait for perfection.
+
+Your first goal is:
+
+* a resume looks good
+* export works
+* payment works
+* users can finish in 10 minutes
+
+That alone can start earning.
+
+---
+
+If you want, next I can write your **exact MVP checklist in order** (like a build roadmap: Step 1, Step 2, Step 3…) so you can follow it like a blueprint without getting stuck.
