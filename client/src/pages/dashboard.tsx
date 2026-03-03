@@ -10,16 +10,18 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { Resume, Subscription } from "@shared/schema";
-import { 
-  Plus, 
-  FileText, 
-  MoreVertical, 
-  Pencil, 
-  Copy, 
-  Trash2, 
+import type { ResumeData } from "@shared/schema";
+import {
+  Plus,
+  FileText,
+  MoreVertical,
+  Pencil,
+  Copy,
+  Trash2,
   Clock,
   Crown,
-  Download
+  Download,
+  BookOpen,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -46,13 +48,13 @@ function ResumeCard({ resume, onRename, onDuplicate, onDelete }: {
   onDuplicate: (id: string) => void;
   onDelete: (id: string) => void;
 }) {
-  const formattedDate = resume.lastSaved 
-    ? new Date(resume.lastSaved).toLocaleDateString('en-US', { 
-        month: 'short', 
-        day: 'numeric',
-        year: 'numeric'
-      })
+  const formattedDate = resume.lastSaved
+    ? new Date(resume.lastSaved).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     : 'Never saved';
+
+  const resumeData = resume.resumeData as ResumeData;
+  const isCV = resumeData?.documentType === "cv";
+  const builderBase = isCV ? "/cv-builder" : "/builder";
 
   return (
     <motion.div
@@ -61,7 +63,7 @@ function ResumeCard({ resume, onRename, onDuplicate, onDelete }: {
       className="group"
     >
       <Card className="overflow-hidden hover:shadow-md transition-shadow">
-        <Link href={`/builder/${resume.id}`} data-testid={`card-resume-${resume.id}`}>
+        <Link href={`${builderBase}/${resume.id}`} data-testid={`card-resume-${resume.id}`}>
           <div className="aspect-[3/4] bg-gradient-to-b from-slate-50 to-slate-100 p-4 relative">
             <div className="h-full bg-white rounded shadow-sm p-3 text-left">
               <div className="flex items-center gap-2 mb-2">
@@ -88,7 +90,12 @@ function ResumeCard({ resume, onRename, onDuplicate, onDelete }: {
         <div className="p-4">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <h3 className="font-medium text-slate-800 truncate">{resume.title}</h3>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <h3 className="font-medium text-slate-800 truncate">{resume.title}</h3>
+                <Badge variant={isCV ? "default" : "secondary"} className="text-xs shrink-0 py-0">
+                  {isCV ? "CV" : "Resume"}
+                </Badge>
+              </div>
               <div className="flex items-center gap-1.5 text-sm text-slate-500 mt-1">
                 <Clock className="w-3.5 h-3.5" />
                 <span>{formattedDate}</span>
@@ -136,6 +143,22 @@ function CreateResumeCard() {
           </div>
           <h3 className="font-medium text-slate-800 mb-1">Create New Resume</h3>
           <p className="text-sm text-slate-500">Start fresh with a new resume</p>
+        </div>
+      </Card>
+    </Link>
+  );
+}
+
+function CreateCVCard() {
+  return (
+    <Link href="/cv-builder" data-testid="button-create-cv">
+      <Card className="h-full min-h-[300px] border-dashed border-2 border-primary/40 hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer flex items-center justify-center">
+        <div className="text-center p-6">
+          <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <BookOpen className="w-8 h-8 text-primary" />
+          </div>
+          <h3 className="font-medium text-slate-800 mb-1">Create New CV</h3>
+          <p className="text-sm text-slate-500">Academic / research curriculum vitae</p>
         </div>
       </Card>
     </Link>
@@ -288,14 +311,22 @@ export default function DashboardPage() {
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-lg font-semibold text-slate-800 flex items-center gap-2">
                 <FileText className="w-5 h-5" />
-                My Resumes
+                My Documents
               </h2>
-              <Link href="/builder" data-testid="button-new-resume">
-                <Button size="sm" className="gap-2">
-                  <Plus className="w-4 h-4" />
-                  New Resume
-                </Button>
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href="/builder" data-testid="button-new-resume">
+                  <Button size="sm" variant="outline" className="gap-2">
+                    <Plus className="w-4 h-4" />
+                    New Resume
+                  </Button>
+                </Link>
+                <Link href="/cv-builder" data-testid="button-new-cv">
+                  <Button size="sm" className="gap-2">
+                    <BookOpen className="w-4 h-4" />
+                    New CV
+                  </Button>
+                </Link>
+              </div>
             </div>
 
             {resumesLoading ? (
@@ -307,6 +338,7 @@ export default function DashboardPage() {
             ) : resumes && resumes.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <CreateResumeCard />
+                <CreateCVCard />
                 {resumes.map((resume) => (
                   <ResumeCard
                     key={resume.id}
@@ -320,6 +352,7 @@ export default function DashboardPage() {
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 <CreateResumeCard />
+                <CreateCVCard />
               </div>
             )}
           </section>

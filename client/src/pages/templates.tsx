@@ -180,7 +180,7 @@ export default function TemplatesPage() {
             <div className="text-center py-16">
               <p className="text-slate-500">No templates match your filters.</p>
               <Button
-                variant="link"
+                variant="ghost"
                 onClick={() => {
                   setSelectedFamily("all");
                   setShowPremiumOnly(false);

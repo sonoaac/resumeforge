@@ -14,8 +14,8 @@ export default function LandingPage() {
   const features = [
     {
       icon: FileText,
-      title: "Professional Templates",
-      description: "Customize the design and format of your resume to reflect your personal brand.",
+      title: "Resume & CV Builder",
+      description: "Build a job-ready resume or a comprehensive academic CV — both with the same clean templates and real-time preview.",
       color: "bg-blue-100 text-blue-600",
     },
     {
@@ -27,7 +27,7 @@ export default function LandingPage() {
     {
       icon: Sparkles,
       title: "Easy Export",
-      description: "Download your resume in PDF or DOCX format with just one click.",
+      description: "Download your resume or CV in PDF or DOCX format with just one click.",
       color: "bg-emerald-100 text-emerald-600",
     },
   ];
@@ -56,23 +56,23 @@ export default function LandingPage() {
                   <span className="text-white">Resume</span>
                   <span className="text-primary">Forge</span>
                   <br />
-                  <span className="text-slate-300">Resume Builder</span>
+                  <span className="text-slate-300">Resume &amp; CV Builder</span>
                 </h1>
                 <p className="text-slate-400 text-lg mb-8 max-w-lg mx-auto lg:mx-0">
-                  Create your perfect resume from any device with our free Resume Builder. Access ATS-friendly templates and expert tips to get hired fast.
+                  Create your perfect resume or academic CV from any device. ATS-friendly templates, real-time preview, and one-click PDF export.
                 </p>
-                
+
                 <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-8">
-                  <Link href="/templates" data-testid="button-view-templates">
-                    <Button variant="outline" size="lg" className="bg-transparent border-white text-white hover:bg-white/10 w-full sm:w-auto">
-                      View templates
+                  <Link href="/onboarding" data-testid="button-build-resume">
+                    <Button size="lg" className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
+                      Build my resume
                     </Button>
                   </Link>
-                  <a href="/api/login" data-testid="button-build-resume">
-                    <Button size="lg" className="bg-primary hover:bg-primary/90 w-full sm:w-auto">
-                      Build my resume today
+                  <Link href="/cv-builder" data-testid="button-build-cv">
+                    <Button variant="outline" size="lg" className="bg-transparent border-white text-white hover:bg-white/10 w-full sm:w-auto">
+                      Build my CV
                     </Button>
-                  </a>
+                  </Link>
                 </div>
 
                 <div className="space-y-3">

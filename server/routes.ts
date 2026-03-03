@@ -104,7 +104,7 @@ export async function registerRoutes(
       const resume = await storage.createResume({
         userId,
         title: title || "My Resume",
-        templateId: templateId || "modern-one",
+        templateId: templateId || "classic-one",
         resumeData: validatedData,
       });
 
@@ -384,7 +384,7 @@ export async function registerRoutes(
       // Generate PDF
       const pdfBuffer = await generateResumePDF({
         resumeData: resume.resumeData,
-        templateId: resume.templateId || "modern-one",
+        templateId: resume.templateId || "classic-one",
         showWatermark,
       });
 
