@@ -18,8 +18,8 @@ export function TemplateThumbnail({
   className?: string;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
-  // Start with a reasonable estimate (180px) so first paint looks correct
-  const [containerWidth, setContainerWidth] = useState(180);
+  // Start with 0 so we don't render until ResizeObserver gives us the real width
+  const [containerWidth, setContainerWidth] = useState(0);
   const [inView, setInView] = useState(false);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export function TemplateThumbnail({
   // US Letter: 816px × 1056px at 96dpi
   const RESUME_W = 816;
   const RESUME_H = 1056;
-  const scale = containerWidth / RESUME_W;
+  const scale = containerWidth > 0 ? containerWidth / RESUME_W : 0;
 
   return (
     <div
@@ -62,13 +62,13 @@ export function TemplateThumbnail({
       style={{
         position: "relative",
         width: "100%",
-        // Aspect ratio matches exact US Letter proportions — no clipping, no empty space
+        // Aspect ratio matches US Letter — container height = width × (11/8.5)
         aspectRatio: `${RESUME_W} / ${RESUME_H}`,
         overflow: "hidden",
-        background: "#f8fafc",
+        background: "white",
       }}
     >
-      {inView && (
+      {scale > 0 && inView && (
         <div
           style={{
             position: "absolute",

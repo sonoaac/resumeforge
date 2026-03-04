@@ -1133,16 +1133,13 @@ export default function BuilderPage() {
             </div>
           </motion.div>
 
-          <div className="hidden lg:block bg-slate-200 rounded-lg p-4 overflow-y-auto max-h-[calc(100vh-220px)]">
-            <div className="sticky top-0">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-medium text-slate-700">Live Preview</h3>
-                <Badge variant="outline">{allTemplates.find(t => t.id === selectedTemplate)?.name || "Classic One"}</Badge>
-              </div>
-              <div className="transform scale-[0.75] origin-top">
-                <ResumePreview data={resumeData} templateId={selectedTemplate} />
-              </div>
+          <div className="hidden lg:block bg-slate-100 rounded-lg overflow-hidden border border-slate-200 max-h-[calc(100vh-220px)] overflow-y-auto">
+            <div className="sticky top-0 bg-slate-100 px-3 py-2.5 border-b border-slate-200 flex items-center justify-between z-10">
+              <h3 className="font-medium text-slate-600 text-sm">Live Preview</h3>
+              <Badge variant="outline" className="text-xs">{allTemplates.find(t => t.id === selectedTemplate)?.name || "Classic"}</Badge>
             </div>
+            {/* TemplateThumbnail used here gives exact height — no grey gap below resume */}
+            <TemplateThumbnail data={resumeData} templateId={selectedTemplate} />
           </div>
         </div>
       </main>

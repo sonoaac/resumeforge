@@ -1645,7 +1645,9 @@ function CvComprehensive({ data }: { data: ResumeData }) {
 export function ResumePreview({ data, templateId = "classic-clean" }: ResumePreviewProps) {
   const template = getTemplateById(templateId);
   const id = template?.id ?? "classic-clean";
-  const W = "bg-white shadow-lg rounded-lg overflow-hidden";
+  // min-h-[1056px] = 11in at 96dpi — ensures white background fills a full page,
+  // eliminating any grey gap below short resumes in all preview contexts
+  const W = "bg-white shadow-lg rounded-lg overflow-hidden min-h-[1056px]";
 
   switch (id) {
     // ── Resume: Single Column ──

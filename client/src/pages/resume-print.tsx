@@ -72,10 +72,10 @@ export default function ResumePrintPage() {
       </div>
 
       {/* Resume preview */}
-      <div id="print-wrapper" style={{ padding: "32px 0", display: "flex", justifyContent: "center" }}>
+      <div id="print-wrapper" style={{ padding: "32px 0", display: "flex", justifyContent: "center", background: "#e2e8f0" }}>
         <div
           id="resume-content"
-          style={{ width: 816, background: "white", boxShadow: "0 4px 32px rgba(0,0,0,0.18)", borderRadius: 4, overflow: "hidden" }}
+          style={{ width: 816, minHeight: 1056, background: "white", boxShadow: "0 4px 32px rgba(0,0,0,0.18)", borderRadius: 4, overflow: "hidden" }}
         >
           {ready && <ResumePreview data={data} templateId={templateId} />}
         </div>
