@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/hooks/use-auth";
@@ -31,8 +30,6 @@ import {
   Save,
   ArrowLeft,
   ArrowRight,
-  Crown,
-  Lock,
   AlertCircle,
   Loader2,
   BookOpen,
@@ -83,8 +80,8 @@ const cvSteps: WizardStep[] = [
 // ─────────────────────────────────────────────
 // Shared form helpers
 // ─────────────────────────────────────────────
-function TemplateSelector({ selectedId, onSelect }: { selectedId: string; onSelect: (id: string) => void }) {
-  const templates = getReleasedTemplates();
+function TemplateSelector({ selectedId, onSelect, isCV }: { selectedId: string; onSelect: (id: string) => void; isCV?: boolean }) {
+  const templates = getReleasedTemplates().filter(t => isCV ? t.type === "cv" : t.type === "resume");
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {templates.map((template) => (
@@ -96,11 +93,6 @@ function TemplateSelector({ selectedId, onSelect }: { selectedId: string; onSele
           }`}
           data-testid={`template-select-${template.id}`}
         >
-          {template.isPremium && (
-            <Badge className="absolute top-2 right-2 z-10 bg-amber-500 text-white border-0 text-xs gap-1">
-              <Crown className="w-3 h-3" /> Pro
-            </Badge>
-          )}
           <div className="aspect-[3/4] bg-gradient-to-b from-slate-50 to-slate-100 p-2" style={{ borderLeft: `3px solid ${template.accentColor}` }}>
             <div className="h-full bg-white rounded shadow-sm p-2">
               <div className="flex items-center gap-1.5 mb-1.5">
@@ -774,11 +766,11 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { r
       {isGuestMode && (
         <Card className="p-6 border-primary/20 bg-primary/5">
           <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-primary mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
             <div>
-              <h4 className="font-medium text-slate-800">Guest mode — PDF includes watermark</h4>
-              <p className="text-sm text-slate-600 mt-1">Your {docLabel} is ready! Download with watermark for free, or sign in to save and remove it.</p>
-              <a href="/api/login" data-testid="link-login-export"><Button className="mt-3" size="sm" variant="outline">Sign in to remove watermark</Button></a>
+              <h4 className="font-medium text-slate-800">Your {docLabel} is ready!</h4>
+              <p className="text-sm text-slate-600 mt-1">Sign in to save your work and access it from any device.</p>
+              <a href="/api/login" data-testid="link-login-export"><Button className="mt-3" size="sm" variant="outline">Sign in to save</Button></a>
             </div>
           </div>
         </Card>
@@ -786,34 +778,14 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { r
       <Card className="p-6">
         <h3 className="font-medium text-slate-800 mb-4">Export Your {docLabel}</h3>
         <div className="space-y-4">
-          <Button onClick={handleExportPDF} disabled={isExporting} className="w-full justify-between" data-testid="button-export-pdf">
+          <Button onClick={handleExportPDF} disabled={isExporting} className="w-full" data-testid="button-export-pdf">
             <span className="flex items-center gap-2">
               {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {isExporting ? "Generating PDF..." : `Download ${docLabel} PDF${isGuestMode ? " (with watermark)" : ""}`}
+              {isExporting ? "Generating PDF..." : `Download ${docLabel} as PDF`}
             </span>
-            <Badge variant="secondary">Free (Watermark)</Badge>
-          </Button>
-          <Button onClick={() => window.location.href = "/pricing"} variant="outline" className="w-full justify-between" data-testid="button-export-pdf-clean">
-            <span className="flex items-center gap-2"><Download className="w-4 h-4" /> Download PDF (No Watermark)</span>
-            <Badge className="bg-primary">$14.99</Badge>
-          </Button>
-          <Button onClick={() => window.location.href = "/pricing"} variant="outline" className="w-full justify-between" data-testid="button-export-docx">
-            <span className="flex items-center gap-2"><Download className="w-4 h-4" /> Download DOCX</span>
-            <Badge className="bg-amber-500 gap-1"><Crown className="w-3 h-3" /> Pro Only</Badge>
           </Button>
         </div>
       </Card>
-      {template?.isPremium && (
-        <Card className="p-6 border-amber-200 bg-amber-50">
-          <div className="flex items-start gap-3">
-            <Lock className="w-5 h-5 text-amber-600 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-amber-800">Premium Template</h4>
-              <p className="text-sm text-amber-700 mt-1">Upgrade to Pro to export without restrictions.</p>
-            </div>
-          </div>
-        </Card>
-      )}
     </div>
   );
 }
@@ -832,7 +804,7 @@ export default function BuilderPage() {
   const wizardSteps = isCV ? cvSteps : resumeSteps;
 
   const searchParams = new URLSearchParams(search);
-  const initialTemplate = searchParams.get("template") || "classic-one";
+  const initialTemplate = searchParams.get("template") || (isCV ? "academic-formal" : "classic-one");
 
   const isNewDoc = !params.id && (location === "/builder/new" || location === "/cv-builder/new" || location === "/builder" || location === "/cv-builder");
   const isGuestMode = !isAuthenticated && isNewDoc;
@@ -934,7 +906,7 @@ export default function BuilderPage() {
   const renderStepContent = () => {
     const stepId = wizardSteps[currentStep].id;
     switch (stepId) {
-      case "template":      return <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} />;
+      case "template":      return <TemplateSelector selectedId={selectedTemplate} onSelect={setSelectedTemplate} isCV={isCV} />;
       case "profile":       return <ProfileForm data={resumeData} onChange={handleDataChange} isCV={isCV} />;
       case "summary":       return <SummaryForm data={resumeData} onChange={handleDataChange} isCV={isCV} />;
       case "experience":    return <ExperienceForm data={resumeData} onChange={handleDataChange} />;

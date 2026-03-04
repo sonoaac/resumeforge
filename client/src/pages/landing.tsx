@@ -98,14 +98,14 @@ export default function LandingPage() {
                   className="mt-6 flex items-center gap-2 justify-center lg:justify-start"
                 >
                   <div className="flex items-center gap-1">
-                    <span className="text-sm text-slate-400">EXCELLENT</span>
+                    <span className="text-sm text-slate-400">100% FREE</span>
                     <div className="flex">
                       {[1,2,3,4,5].map((i) => (
                         <Star key={i} className="w-4 h-4 fill-emerald-500 text-emerald-500" />
                       ))}
                     </div>
                   </div>
-                  <span className="text-sm text-slate-400">17,339 reviews on Trustpilot</span>
+                  <span className="text-sm text-slate-400">No watermarks · No subscription</span>
                 </motion.div>
               </motion.div>
 
@@ -277,7 +277,7 @@ export default function LandingPage() {
 
               <Link href="/templates" data-testid="button-view-all-templates">
                 <Button size="lg" className="bg-primary hover:bg-primary/90">
-                  View all 60+ resume templates
+                  Browse all templates
                 </Button>
               </Link>
             </motion.div>
@@ -301,10 +301,10 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
-                { title: "60+ Templates", description: "Professional designs for every industry" },
+                { title: "10 Templates", description: "Professional designs for resume and CV" },
                 { title: "ATS Friendly", description: "Optimized to pass applicant tracking systems" },
                 { title: "Easy to Use", description: "Build your resume in under 10 minutes" },
-                { title: "Export Options", description: "Download as PDF or DOCX instantly" },
+                { title: "100% Free", description: "No watermarks, no subscription required" },
               ].map((item, index) => (
                 <motion.div
                   key={item.title}

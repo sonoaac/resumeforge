@@ -88,7 +88,7 @@ export default function SelectTemplate() {
 
   const handleChooseLater = () => {
     localStorage.setItem("resumeforge_selected_template", JSON.stringify({
-      templateId: "modern-clean",
+      templateId: "classic-one",
       accentColor: ACCENT_COLORS[0],
     }));
     setLocation("/builder/new");

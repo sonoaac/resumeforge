@@ -208,14 +208,19 @@ export class MemStorage implements IStorage {
 
   async seedTemplates(): Promise<void> {
     if (this._templates.size > 0) return;
-    await this.createTemplate({
-      id: "classic-one",
-      name: "Classic One",
-      family: "classic",
-      isPremium: false,
-      isReleased: true,
-      bestFor: "business",
-    });
+    const templates = [
+      { id: "classic-one",       name: "Classic One",        family: "classic",      isPremium: false, isReleased: true, bestFor: "Business, Finance, Law" },
+      { id: "modern-slate",      name: "Modern Slate",       family: "modern",       isPremium: false, isReleased: true, bestFor: "Tech, Engineering, Data" },
+      { id: "executive-bold",    name: "Executive Bold",     family: "professional", isPremium: false, isReleased: true, bestFor: "Executive, Management, C-Suite" },
+      { id: "minimal-clean",     name: "Minimal Clean",      family: "minimal",      isPremium: false, isReleased: true, bestFor: "Consulting, Finance, Legal" },
+      { id: "creative-vibrant",  name: "Creative Vibrant",   family: "creative",     isPremium: false, isReleased: true, bestFor: "Design, Marketing, Media" },
+      { id: "academic-formal",   name: "Academic Formal",    family: "academic",     isPremium: false, isReleased: true, bestFor: "Academia, Research, Tenure" },
+      { id: "research-focused",  name: "Research Focused",   family: "academic",     isPremium: false, isReleased: true, bestFor: "Research, Lab, Science" },
+      { id: "scholar-modern",    name: "Scholar Modern",     family: "academic",     isPremium: false, isReleased: true, bestFor: "Graduate, Postdoc, Faculty" },
+      { id: "professor-elegant", name: "Professor Elegant",  family: "academic",     isPremium: false, isReleased: true, bestFor: "Professor, Teaching, University" },
+      { id: "phd-dynamic",       name: "PhD Dynamic",        family: "academic",     isPremium: false, isReleased: true, bestFor: "PhD Student, Researcher, Postdoc" },
+    ];
+    for (const t of templates) await this.createTemplate(t);
   }
 }
 
@@ -330,11 +335,20 @@ export class DatabaseStorage implements IStorage {
 
   // Seed templates
   async seedTemplates(): Promise<void> {
-    const existingTemplates = await this.getAllTemplates();
-    if (existingTemplates.length > 0) return;
+    const existing = await this.getAllTemplates();
+    if (existing.length > 0) return;
 
     const templateData = [
-      { id: "classic-one", name: "Classic One", family: "classic", isPremium: false, isReleased: true, bestFor: "business" },
+      { id: "classic-one",       name: "Classic One",       family: "classic",      isPremium: false, isReleased: true, bestFor: "Business, Finance, Law" },
+      { id: "modern-slate",      name: "Modern Slate",      family: "modern",       isPremium: false, isReleased: true, bestFor: "Tech, Engineering, Data" },
+      { id: "executive-bold",    name: "Executive Bold",    family: "professional", isPremium: false, isReleased: true, bestFor: "Executive, Management, C-Suite" },
+      { id: "minimal-clean",     name: "Minimal Clean",     family: "minimal",      isPremium: false, isReleased: true, bestFor: "Consulting, Finance, Legal" },
+      { id: "creative-vibrant",  name: "Creative Vibrant",  family: "creative",     isPremium: false, isReleased: true, bestFor: "Design, Marketing, Media" },
+      { id: "academic-formal",   name: "Academic Formal",   family: "academic",     isPremium: false, isReleased: true, bestFor: "Academia, Research, Tenure" },
+      { id: "research-focused",  name: "Research Focused",  family: "academic",     isPremium: false, isReleased: true, bestFor: "Research, Lab, Science" },
+      { id: "scholar-modern",    name: "Scholar Modern",    family: "academic",     isPremium: false, isReleased: true, bestFor: "Graduate, Postdoc, Faculty" },
+      { id: "professor-elegant", name: "Professor Elegant", family: "academic",     isPremium: false, isReleased: true, bestFor: "Professor, Teaching, University" },
+      { id: "phd-dynamic",       name: "PhD Dynamic",       family: "academic",     isPremium: false, isReleased: true, bestFor: "PhD Student, Researcher, Postdoc" },
     ];
 
     for (const template of templateData) {

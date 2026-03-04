@@ -2,10 +2,8 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
-import { createPaypalOrder, capturePaypalOrder, loadPaypalDefault, verifyPaypalOrder } from "./paypal";
 import { generateResumePDF } from "./pdf";
 import { sampleResumeData, resumeDataSchema } from "@shared/schema";
-import { z } from "zod";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -14,19 +12,6 @@ export async function registerRoutes(
   // Setup authentication (must be before other routes)
   await setupAuth(app);
   registerAuthRoutes(app);
-
-  // PayPal routes
-  app.get("/paypal/setup", async (req, res) => {
-    await loadPaypalDefault(req, res);
-  });
-
-  app.post("/paypal/order", async (req, res) => {
-    await createPaypalOrder(req, res);
-  });
-
-  app.post("/paypal/order/:orderID/capture", async (req, res) => {
-    await capturePaypalOrder(req, res);
-  });
 
   // Seed templates on startup
   await storage.seedTemplates();
@@ -44,7 +29,6 @@ export async function registerRoutes(
       const pdfBuffer = await generateResumePDF({
         resumeData: parsed.data,
         templateId: templateId || "classic-one",
-        showWatermark: true,
       });
 
       const filename = `${parsed.data.profile.fullName || "resume"}.pdf`.replace(/[^a-zA-Z0-9.-]/g, "_");
@@ -218,220 +202,25 @@ export async function registerRoutes(
     }
   });
 
-  // Subscription API (protected)
-  app.get("/api/subscription", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      let subscription = await storage.getSubscription(userId);
-      
-      // Create default free subscription if none exists
-      if (!subscription) {
-        subscription = await storage.createOrUpdateSubscription({
-          userId,
-          status: "free",
-        });
-      }
-      
-      res.json(subscription);
-    } catch (error) {
-      console.error("Error fetching subscription:", error);
-      res.status(500).json({ error: "Failed to fetch subscription" });
-    }
-  });
-
-  // Payments API (protected)
-  app.get("/api/payments", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const payments = await storage.getPaymentsByUser(userId);
-      res.json(payments);
-    } catch (error) {
-      console.error("Error fetching payments:", error);
-      res.status(500).json({ error: "Failed to fetch payments" });
-    }
-  });
-
-  // Pricing tier definitions - must match frontend pricing page
-  const PRICING_TIERS = {
-    onetime: { amount: "14.99", currency: "USD" },
-    subscription: { amount: "9.99", currency: "USD" },
-  } as const;
-
-  app.post("/api/payments/complete", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { paypalOrderId, type, resumeId } = req.body;
-
-      if (!paypalOrderId) {
-        return res.status(400).json({ error: "PayPal order ID required" });
-      }
-
-      const paymentType = type === "subscription" ? "subscription" : "onetime";
-
-      // Server-side verification of PayPal order
-      const verification = await verifyPaypalOrder(paypalOrderId);
-      
-      if (!verification.verified) {
-        console.error("PayPal order verification failed:", verification);
-        return res.status(400).json({ 
-          error: "Payment verification failed. Please try again or contact support." 
-        });
-      }
-
-      // Validate amount matches expected pricing tier
-      const expectedPricing = PRICING_TIERS[paymentType as keyof typeof PRICING_TIERS];
-      const verifiedAmount = parseFloat(verification.amount || "0");
-      const expectedAmount = parseFloat(expectedPricing.amount);
-
-      if (verifiedAmount < expectedAmount) {
-        console.error(`Payment amount mismatch: received ${verifiedAmount}, expected ${expectedAmount}`);
-        return res.status(400).json({ 
-          error: "Payment amount does not match expected price. Please contact support." 
-        });
-      }
-
-      if (verification.currency !== expectedPricing.currency) {
-        console.error(`Payment currency mismatch: received ${verification.currency}, expected ${expectedPricing.currency}`);
-        return res.status(400).json({ 
-          error: "Invalid payment currency. Please contact support." 
-        });
-      }
-
-      // Create payment record with verified data
-      const payment = await storage.createPayment({
-        userId,
-        resumeId,
-        paypalOrderId,
-        amount: verification.amount || expectedPricing.amount,
-        type: paymentType,
-        status: "completed",
-      });
-
-      // Update subscription based on verified payment
-      if (paymentType === "subscription") {
-        await storage.createOrUpdateSubscription({
-          userId,
-          status: "pro",
-          paypalSubscriptionId: paypalOrderId,
-        });
-      } else if (paymentType === "onetime") {
-        const currentSub = await storage.getSubscription(userId);
-        if (!currentSub || currentSub.status === "free") {
-          await storage.createOrUpdateSubscription({
-            userId,
-            status: "onetime",
-            exportsRemaining: 5,
-          });
-        }
-      }
-
-      res.json({ success: true, payment });
-    } catch (error) {
-      console.error("Error completing payment:", error);
-      res.status(500).json({ error: "Failed to complete payment" });
-    }
-  });
-
-  // Exports API (protected)
-  app.get("/api/exports", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const exports = await storage.getExportsByUser(userId);
-      res.json(exports);
-    } catch (error) {
-      console.error("Error fetching exports:", error);
-      res.status(500).json({ error: "Failed to fetch exports" });
-    }
-  });
-
-  app.post("/api/exports", isAuthenticated, async (req: any, res) => {
-    try {
-      const userId = req.user.claims.sub;
-      const { resumeId, exportType } = req.body;
-
-      // Check subscription status
-      const subscription = await storage.getSubscription(userId);
-      const hasWatermark = !subscription || subscription.status === "free";
-
-      // For DOCX, require Pro
-      if (exportType === "docx" && subscription?.status !== "pro") {
-        return res.status(403).json({ error: "DOCX export requires Pro subscription" });
-      }
-
-      // Create export record
-      const exportRecord = await storage.createExport({
-        userId,
-        resumeId,
-        exportType,
-        hasWatermark,
-      });
-
-      // Decrease exports remaining for onetime users
-      if (subscription?.status === "onetime" && subscription.exportsRemaining) {
-        await storage.createOrUpdateSubscription({
-          userId,
-          status: subscription.exportsRemaining > 1 ? "onetime" : "free",
-          exportsRemaining: Math.max(0, subscription.exportsRemaining - 1),
-        });
-      }
-
-      res.json({ success: true, export: exportRecord, hasWatermark });
-    } catch (error) {
-      console.error("Error creating export:", error);
-      res.status(500).json({ error: "Failed to create export" });
-    }
-  });
-
-  // PDF Download endpoint
+  // PDF Download endpoint (free, no watermark)
   app.get("/api/resumes/:id/download", isAuthenticated, async (req: any, res) => {
     try {
       const userId = req.user.claims.sub;
       const resume = await storage.getResume(req.params.id);
-      
+
       if (!resume) {
         return res.status(404).json({ error: "Resume not found" });
       }
-      
+
       if (resume.userId !== userId) {
         return res.status(403).json({ error: "Unauthorized" });
       }
 
-      // Check subscription status for watermark
-      const subscription = await storage.getSubscription(userId);
-      const showWatermark = !subscription || subscription.status === "free";
-
-      // Check if onetime user has exports remaining
-      if (subscription?.status === "onetime" && (subscription.exportsRemaining || 0) <= 0) {
-        return res.status(403).json({ 
-          error: "No exports remaining. Please upgrade to Pro for unlimited exports." 
-        });
-      }
-
-      // Generate PDF
       const pdfBuffer = await generateResumePDF({
         resumeData: resume.resumeData,
         templateId: resume.templateId || "classic-one",
-        showWatermark,
       });
 
-      // Record the export
-      await storage.createExport({
-        userId,
-        resumeId: resume.id,
-        exportType: "pdf",
-        hasWatermark: showWatermark,
-      });
-
-      // Decrease exports remaining for onetime users
-      if (subscription?.status === "onetime" && subscription.exportsRemaining) {
-        await storage.createOrUpdateSubscription({
-          userId,
-          status: subscription.exportsRemaining > 1 ? "onetime" : "free",
-          exportsRemaining: Math.max(0, subscription.exportsRemaining - 1),
-        });
-      }
-
-      // Send the PDF
       const filename = `${resume.resumeData.profile.fullName || "resume"}.pdf`.replace(/[^a-zA-Z0-9.-]/g, "_");
       res.setHeader("Content-Type", "application/pdf");
       res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);

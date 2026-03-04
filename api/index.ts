@@ -22,7 +22,7 @@ app.get("/api/templates", async (_req, res) => {
   }
 });
 
-// Public PDF generation (guest mode — watermark always shown)
+// Public PDF generation (guest mode — free, no watermark)
 app.post("/api/pdf/generate", async (req, res) => {
   try {
     const { resumeData, templateId } = req.body;
@@ -35,7 +35,6 @@ app.post("/api/pdf/generate", async (req, res) => {
     const pdfBuffer = await generateResumePDF({
       resumeData: parsed.data,
       templateId: templateId || "classic-one",
-      showWatermark: true,
     });
 
     const filename = `${parsed.data.profile.fullName || "resume"}.pdf`.replace(

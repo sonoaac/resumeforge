@@ -4,7 +4,6 @@ import type { ResumeData } from "@shared/schema";
 interface GeneratePDFOptions {
   resumeData: ResumeData;
   templateId: string;
-  showWatermark: boolean;
 }
 
 const formatDate = (dateStr: string): string => {
@@ -14,7 +13,7 @@ const formatDate = (dateStr: string): string => {
   return `${months[parseInt(month) - 1] || ""} ${year}`;
 };
 
-export function generateResumePDF({ resumeData, templateId, showWatermark }: GeneratePDFOptions): Promise<Buffer> {
+export function generateResumePDF({ resumeData, templateId }: GeneratePDFOptions): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     try {
       const isCV = resumeData.documentType === "cv";
@@ -269,14 +268,6 @@ export function generateResumePDF({ resumeData, templateId, showWatermark }: Gen
           if (ref.relationship) doc.fontSize(9).fillColor(mutedColor).text(ref.relationship, { oblique: true });
           if (index < (resumeData.references ?? []).length - 1) doc.moveDown(0.5);
         });
-      }
-
-      // ── Watermark ─────────────────────────────────────────
-      if (showWatermark) {
-        doc.save();
-        doc.rotate(-45, { origin: [306, 396] });
-        doc.fontSize(60).fillOpacity(0.08).fillColor("#000000").text("ResumeForge", 100, 400);
-        doc.restore();
       }
 
       doc.end();

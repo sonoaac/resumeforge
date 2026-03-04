@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
-import type { Resume, Subscription } from "@shared/schema";
+import type { Resume } from "@shared/schema";
 import type { ResumeData } from "@shared/schema";
 import {
   Plus,
@@ -19,8 +19,6 @@ import {
   Copy,
   Trash2,
   Clock,
-  Crown,
-  Download,
   BookOpen,
 } from "lucide-react";
 import {
@@ -177,10 +175,6 @@ export default function DashboardPage() {
     queryKey: ["/api/resumes"],
   });
 
-  const { data: subscription } = useQuery<Subscription>({
-    queryKey: ["/api/subscription"],
-  });
-
   const renameMutation = useMutation({
     mutationFn: async ({ id, title }: { id: string; title: string }) => {
       return apiRequest("PATCH", `/api/resumes/${id}`, { title });
@@ -252,18 +246,6 @@ export default function DashboardPage() {
     }
   };
 
-  const getPlanBadge = () => {
-    if (!subscription) return null;
-    switch (subscription.status) {
-      case "pro":
-        return <Badge className="bg-amber-500 gap-1"><Crown className="w-3 h-3" /> Pro</Badge>;
-      case "onetime":
-        return <Badge variant="secondary">Export Pack</Badge>;
-      default:
-        return <Badge variant="outline">Free</Badge>;
-    }
-  };
-
   if (authLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -297,13 +279,7 @@ export default function DashboardPage() {
               <p className="text-slate-600 mt-1">Manage your resumes and track your progress</p>
             </div>
             <div className="flex items-center gap-3">
-              {getPlanBadge()}
-              <Link href="/pricing" data-testid="link-upgrade">
-                <Button variant="outline" size="sm" className="gap-2">
-                  <Crown className="w-4 h-4" />
-                  Upgrade
-                </Button>
-              </Link>
+              <Badge variant="outline">Free</Badge>
             </div>
           </div>
 
@@ -357,32 +333,7 @@ export default function DashboardPage() {
             )}
           </section>
 
-          <section className="mt-12">
-            <Card className="p-6 bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-primary/20 rounded-full flex items-center justify-center">
-                    <Download className="w-6 h-6 text-primary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-800">Ready to export?</h3>
-                    <p className="text-sm text-slate-600">
-                      {subscription?.status === "pro" 
-                        ? "You have unlimited exports with Pro!"
-                        : subscription?.status === "onetime"
-                        ? `You have ${subscription.exportsRemaining || 0} exports remaining`
-                        : "Upgrade to remove watermarks and export to DOCX"}
-                    </p>
-                  </div>
-                </div>
-                {subscription?.status !== "pro" && (
-                  <Link href="/pricing" data-testid="button-view-plans">
-                    <Button>View Plans</Button>
-                  </Link>
-                )}
-              </div>
-            </Card>
-          </section>
+
         </div>
       </main>
 

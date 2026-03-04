@@ -5,7 +5,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allTemplates, templateFamilies, type TemplateInfo } from "@/lib/templates";
-import { Crown, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 
 function TemplateCard({ template }: { template: TemplateInfo }) {
@@ -25,16 +24,7 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
         </div>
       )}
 
-      {template.isPremium && !isComingSoon && (
-        <div className="absolute top-3 right-3 z-10">
-          <Badge className="bg-amber-500 text-white border-0 gap-1">
-            <Crown className="w-3 h-3" />
-            Premium
-          </Badge>
-        </div>
-      )}
-
-      <div 
+      <div
         className="aspect-[3/4] bg-gradient-to-b from-slate-50 to-slate-100 p-4 relative overflow-hidden"
         style={{ borderLeft: `4px solid ${template.accentColor}` }}
       >
@@ -78,14 +68,7 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
           <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/80 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
             <Link href={`/builder?template=${template.id}`} data-testid={`button-use-template-${template.id}`}>
               <Button className="bg-primary hover:bg-primary/90">
-                {template.isPremium ? (
-                  <>
-                    <Lock className="w-4 h-4 mr-2" />
-                    Use Template
-                  </>
-                ) : (
-                  "Use Template"
-                )}
+                Use Template
               </Button>
             </Link>
           </div>
@@ -109,16 +92,12 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
 
 export default function TemplatesPage() {
   const [selectedFamily, setSelectedFamily] = useState("all");
-  const [showPremiumOnly, setShowPremiumOnly] = useState(false);
 
   const filteredTemplates = allTemplates.filter((template) => {
-    if (selectedFamily !== "all" && template.family !== selectedFamily) return false;
-    if (showPremiumOnly && !template.isPremium) return false;
+    if (selectedFamily === "resume" && template.type !== "resume") return false;
+    if (selectedFamily === "cv" && template.type !== "cv") return false;
     return true;
   });
-
-  const freeCount = allTemplates.filter(t => !t.isPremium).length;
-  const premiumCount = allTemplates.filter(t => t.isPremium).length;
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
@@ -153,20 +132,8 @@ export default function TemplatesPage() {
               ))}
             </div>
 
-            <div className="flex items-center gap-4">
-              <Button
-                variant={showPremiumOnly ? "default" : "outline"}
-                size="sm"
-                onClick={() => setShowPremiumOnly(!showPremiumOnly)}
-                className="gap-2"
-                data-testid="filter-premium"
-              >
-                <Crown className="w-4 h-4" />
-                Premium Only
-              </Button>
-              <span className="text-sm text-slate-600">
-                {freeCount} Free / {premiumCount} Premium
-              </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-slate-600">{filteredTemplates.length} templates — all free</span>
             </div>
           </div>
 
@@ -183,7 +150,6 @@ export default function TemplatesPage() {
                 variant="ghost"
                 onClick={() => {
                   setSelectedFamily("all");
-                  setShowPremiumOnly(false);
                 }}
                 data-testid="button-clear-filters"
               >
