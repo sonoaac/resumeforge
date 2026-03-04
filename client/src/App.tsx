@@ -9,6 +9,7 @@ import TemplatesPage from "@/pages/templates";
 import PricingPage from "@/pages/pricing";
 import DashboardPage from "@/pages/dashboard";
 import BuilderPage from "@/pages/builder";
+import ResumePrintPage from "@/pages/resume-print";
 import OnboardingPage from "@/pages/onboarding";
 import { useAuth } from "@/hooks/use-auth";
 import CVOnboardingPage from "@/pages/cv-onboarding";
@@ -25,6 +26,7 @@ function Router() {
       <Route path="/pricing" component={PricingPage} />
       <Route path="/dashboard" component={DashboardPage} />
       <Route path="/onboarding" component={OnboardingPage} />
+      <Route path="/resume/print" component={ResumePrintPage} />
       <Route path="/builder/new" component={BuilderPage} />
       <Route path="/builder" component={BuilderPage} />
       <Route path="/builder/:id" component={BuilderPage} />

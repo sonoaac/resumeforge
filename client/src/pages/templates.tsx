@@ -13,25 +13,25 @@ import { motion } from "framer-motion";
 const resumePreviewData: ResumeData = {
   documentType: "resume",
   profile: {
-    fullName: "Sonoaac Mar",
-    professionalTitle: "Web Developer",
+    fullName: "Sonoaac Mark",
+    professionalTitle: "Software Developer",
     email: "sonoaac@email.com",
     phone: "0000000000",
     city: "Brooklyn",
     state: "NY",
     country: "USA",
-    linkedIn: "linkedin.com/in/sonoaacmar",
+    linkedIn: "linkedin.com/in/sonoaacmark",
     portfolio: "sonoaac.dev",
     website: "",
   },
   summary: {
-    headline: "Web Developer",
-    text: "Creative web developer with 5+ years of experience building responsive, accessible applications. Passionate about clean code and great user experiences.",
+    headline: "Software Developer",
+    text: "Versatile software developer with 5+ years of experience building web applications and IT support systems. Passionate about clean code and great user experiences.",
   },
   experience: [
     {
       id: "p1",
-      jobTitle: "Web Developer",
+      jobTitle: "Software Developer",
       company: "Tech Studio NYC",
       location: "Brooklyn, NY",
       startDate: "2021-03",
@@ -45,7 +45,7 @@ const resumePreviewData: ResumeData = {
     },
     {
       id: "p2",
-      jobTitle: "Junior Developer",
+      jobTitle: "IT Support Specialist",
       company: "Digital Agency",
       location: "New York, NY",
       startDate: "2019-06",
@@ -104,7 +104,7 @@ const resumePreviewData: ResumeData = {
 const cvPreviewData: ResumeData = {
   documentType: "cv",
   profile: {
-    fullName: "Sonoaac Mar",
+    fullName: "Sonoaac Mark",
     professionalTitle: "Research Scholar",
     email: "sonoaac@edu.com",
     phone: "0000000000",

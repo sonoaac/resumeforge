@@ -83,11 +83,11 @@ const cvSteps: WizardStep[] = [
 // ─────────────────────────────────────────────
 const resumePreviewData: ResumeData = {
   documentType: "resume",
-  profile: { fullName: "Sonoaac Mar", professionalTitle: "Web Developer", email: "sonoaac@email.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "linkedin.com/in/sonoaacmar", portfolio: "sonoaac.dev", website: "" },
-  summary: { headline: "Web Developer", text: "Creative web developer with 5+ years of experience building responsive, accessible applications. Passionate about clean code and great user experiences." },
+  profile: { fullName: "Sonoaac Mark", professionalTitle: "Software Developer", email: "sonoaac@email.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "linkedin.com/in/sonoaacmark", portfolio: "sonoaac.dev", website: "" },
+  summary: { headline: "Software Developer", text: "Versatile software developer with 5+ years of experience building web applications and IT support systems. Passionate about clean code and great user experiences." },
   experience: [
-    { id: "p1", jobTitle: "Web Developer", company: "Tech Studio NYC", location: "Brooklyn, NY", startDate: "2021-03", endDate: "", isCurrent: true, bullets: ["Built responsive web applications for 20+ clients", "Led frontend development with React and TypeScript", "Improved site performance by 45% through optimization"] },
-    { id: "p2", jobTitle: "Junior Developer", company: "Digital Agency", location: "New York, NY", startDate: "2019-06", endDate: "2021-02", isCurrent: false, bullets: ["Developed interactive UI components", "Collaborated with design team on user flows"] },
+    { id: "p1", jobTitle: "Software Developer", company: "Tech Studio NYC", location: "Brooklyn, NY", startDate: "2021-03", endDate: "", isCurrent: true, bullets: ["Built responsive web applications for 20+ clients", "Led frontend development with React and TypeScript", "Improved site performance by 45% through optimization"] },
+    { id: "p2", jobTitle: "IT Support Specialist", company: "Digital Agency", location: "New York, NY", startDate: "2019-06", endDate: "2021-02", isCurrent: false, bullets: ["Managed IT infrastructure and user support tickets", "Collaborated with development team on technical solutions"] },
   ],
   education: [{ id: "e1", degree: "B.S. Computer Science", fieldOfStudy: "Computer Science", school: "City University of New York", location: "New York, NY", startDate: "2015-09", endDate: "2019-05", isCurrent: false, honors: "" }],
   skills: [{ id: "s1", name: "React", level: "expert" }, { id: "s2", name: "TypeScript", level: "advanced" }, { id: "s3", name: "Node.js", level: "advanced" }, { id: "s4", name: "CSS / Tailwind", level: "expert" }],
@@ -97,7 +97,7 @@ const resumePreviewData: ResumeData = {
 
 const cvPreviewData: ResumeData = {
   documentType: "cv",
-  profile: { fullName: "Sonoaac Mar", professionalTitle: "Research Scholar", email: "sonoaac@edu.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "", portfolio: "sonoaac.edu", website: "" },
+  profile: { fullName: "Sonoaac Mark", professionalTitle: "Research Scholar", email: "sonoaac@edu.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "", portfolio: "sonoaac.edu", website: "" },
   summary: { headline: "Research Scholar", text: "Academic researcher with expertise in computational methods. Published in peer-reviewed journals with experience in grant writing and graduate instruction." },
   experience: [],
   education: [{ id: "e1", degree: "Ph.D. Computer Science", fieldOfStudy: "Computer Science", school: "City University of New York", location: "New York, NY", startDate: "2018-09", endDate: "2023-05", isCurrent: false, honors: "" }],
@@ -768,16 +768,24 @@ function FinalizeForm({ data, isCV }: { data: ResumeData; isCV: boolean }) {
 
 function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { resumeId?: string; templateId: string; isGuestMode?: boolean; isCV?: boolean; resumeData?: ResumeData }) {
   const { toast } = useToast();
-  const template = allTemplates.find(t => t.id === templateId);
   const [isExporting, setIsExporting] = useState(false);
+  const [pdfFailed, setPdfFailed] = useState(false);
   const docLabel = isCV ? "CV" : "Resume";
 
+  // ── Primary: open print/save-as-PDF page in new tab ─────────────────────
+  const handlePrint = () => {
+    if (!resumeData) return;
+    localStorage.setItem("resumeforge_print_job", JSON.stringify({ resumeData, templateId }));
+    window.open("/resume/print", "_blank");
+  };
+
+  // ── Secondary: server-side PDF download ─────────────────────────────────
   const handleExportPDF = async () => {
     setIsExporting(true);
+    setPdfFailed(false);
     try {
       let response: Response;
       if (isGuestMode && resumeData) {
-        // Guest mode: use the public PDF endpoint with in-memory data
         response = await fetch("/api/pdf/generate", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -790,7 +798,7 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { r
         return;
       }
       if (!response.ok) {
-        let msg = "Failed to export PDF";
+        let msg = "Server PDF failed";
         try { const e = await response.json(); msg = e.error || msg; } catch {}
         throw new Error(msg);
       }
@@ -803,38 +811,76 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { r
       a.click();
       window.URL.revokeObjectURL(url);
       document.body.removeChild(a);
-      toast({ title: `PDF downloaded successfully!` });
+      toast({ title: `${docLabel} PDF downloaded!` });
     } catch (error: any) {
-      toast({ title: error.message || "Failed to export PDF", variant: "destructive" });
+      setPdfFailed(true);
+      toast({ title: "Server PDF unavailable — use Print / Save as PDF instead", variant: "destructive" });
     } finally {
       setIsExporting(false);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {isGuestMode && (
-        <Card className="p-6 border-primary/20 bg-primary/5">
+        <Card className="p-5 border-primary/20 bg-primary/5">
           <div className="flex items-start gap-3">
-            <CheckCircle className="w-5 h-5 text-primary mt-0.5" />
+            <CheckCircle className="w-5 h-5 text-primary mt-0.5 shrink-0" />
             <div>
               <h4 className="font-medium text-slate-800">Your {docLabel} is ready!</h4>
               <p className="text-sm text-slate-600 mt-1">Sign in to save your work and access it from any device.</p>
-              <a href="/api/login" data-testid="link-login-export"><Button className="mt-3" size="sm" variant="outline">Sign in to save</Button></a>
+              <a href="/api/login" data-testid="link-login-export">
+                <Button className="mt-3" size="sm" variant="outline">Sign in to save</Button>
+              </a>
             </div>
           </div>
         </Card>
       )}
-      <Card className="p-6">
-        <h3 className="font-medium text-slate-800 mb-4">Export Your {docLabel}</h3>
-        <div className="space-y-4">
-          <Button onClick={handleExportPDF} disabled={isExporting} className="w-full" data-testid="button-export-pdf">
-            <span className="flex items-center gap-2">
-              {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {isExporting ? "Generating PDF..." : `Download ${docLabel} as PDF`}
-            </span>
-          </Button>
+
+      {/* ── PRIMARY: Print / Save as PDF ── */}
+      <Card className="p-5 border-primary/30 bg-primary/5">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center shrink-0">
+            <Download className="w-4 h-4 text-primary" />
+          </div>
+          <div>
+            <h3 className="font-semibold text-slate-800">Print / Save as PDF</h3>
+            <p className="text-xs text-slate-500 mt-0.5">Opens a print-ready preview — choose "Save as PDF" in the dialog</p>
+          </div>
         </div>
+        <Button
+          onClick={handlePrint}
+          className="w-full gap-2"
+          data-testid="button-print-pdf"
+        >
+          <Download className="w-4 h-4" />
+          Open Print Preview
+        </Button>
+        <p className="text-xs text-slate-500 mt-3 flex items-start gap-1">
+          <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+          In print dialog: set <strong className="mx-0.5">Destination → Save as PDF</strong>, <strong className="mx-0.5">Margins → None</strong>, enable <strong className="mx-0.5">Background graphics</strong>
+        </p>
+      </Card>
+
+      {/* ── SECONDARY: Direct PDF download ── */}
+      <Card className="p-5">
+        <h3 className="font-medium text-slate-700 mb-3 text-sm">Direct PDF Download</h3>
+        {pdfFailed && (
+          <div className="flex items-start gap-2 bg-amber-50 border border-amber-200 rounded-md p-3 mb-3 text-xs text-amber-800">
+            <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+            Server PDF is unavailable on this deployment. Use the Print option above instead — it works in all browsers.
+          </div>
+        )}
+        <Button
+          onClick={handleExportPDF}
+          disabled={isExporting}
+          variant="outline"
+          className="w-full gap-2"
+          data-testid="button-export-pdf"
+        >
+          {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+          {isExporting ? "Generating..." : `Download ${docLabel} as PDF`}
+        </Button>
       </Card>
     </div>
   );
