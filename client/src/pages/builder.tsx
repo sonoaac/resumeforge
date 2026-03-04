@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/hooks/use-auth";
@@ -1048,7 +1049,7 @@ export default function BuilderPage() {
                 <Badge variant="outline">{allTemplates.find(t => t.id === selectedTemplate)?.name || "Classic One"}</Badge>
               </div>
               <div className="transform scale-[0.75] origin-top">
-                <ResumePreview data={resumeData} templateId={selectedTemplate} showWatermark={true} />
+                <ResumePreview data={resumeData} templateId={selectedTemplate} />
               </div>
             </div>
           </div>
