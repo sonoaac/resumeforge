@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allTemplates, templateFamilies, type TemplateInfo } from "@/lib/templates";
-import { ResumePreview } from "@/components/resume/ResumePreview";
+import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
 import type { ResumeData } from "@shared/schema";
 import { motion } from "framer-motion";
 
@@ -196,22 +196,9 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
         </div>
       )}
 
-      {/* Scaled live HTML preview */}
-      <div className="aspect-[3/4] relative overflow-hidden bg-white">
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            width: "816px",
-            height: "1056px",
-            transform: "scale(0.25)",
-            transformOrigin: "top left",
-            pointerEvents: "none",
-          }}
-        >
-          <ResumePreview data={previewData} templateId={template.id} />
-        </div>
+      {/* Perfect-scaled thumbnail — matches full preview exactly */}
+      <div className="relative">
+        <TemplateThumbnail data={previewData} templateId={template.id} />
 
         {!isComingSoon && (
           <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10">

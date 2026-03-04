@@ -15,6 +15,7 @@ import { useToast } from "@/hooks/use-toast";
 import type { Resume, ResumeData } from "@shared/schema";
 import { sampleResumeData, sampleCVData } from "@shared/schema";
 import { ResumePreview } from "@/components/resume/ResumePreview";
+import { TemplateThumbnail } from "@/components/resume/TemplateThumbnail";
 import { WizardSteps, type WizardStep } from "@/components/resume/WizardSteps";
 import { allTemplates, getReleasedTemplates, type TemplateInfo } from "@/lib/templates";
 import {
@@ -129,22 +130,9 @@ function TemplateSelector({ selectedId, onSelect, isCV }: { selectedId: string; 
           }`}
           data-testid={`template-select-${template.id}`}
         >
-          {/* Scaled HTML preview thumbnail */}
-          <div className="aspect-[3/4] relative overflow-hidden bg-white">
-            <div
-              style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "816px",
-                height: "1056px",
-                transform: "scale(0.22)",
-                transformOrigin: "top left",
-                pointerEvents: "none",
-              }}
-            >
-              <ResumePreview data={previewData} templateId={template.id} />
-            </div>
+          {/* Perfect-scaled thumbnail */}
+          <div className="relative">
+            <TemplateThumbnail data={previewData} templateId={template.id} />
             {selectedId === template.id && (
               <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center z-10">
                 <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
@@ -1023,21 +1011,29 @@ export default function BuilderPage() {
     }
   };
 
-  // Guest localStorage persistence
+  // Guest localStorage persistence — versioned so stale data is ignored
+  const GUEST_VERSION = "v4";
   useEffect(() => {
     if (isNewDoc && !isAuthenticated) {
       const key = isCV ? "resumeforge_guest_cv" : "resumeforge_guest_resume";
       const stored = localStorage.getItem("resumeforge_selected_template");
       if (stored) { try { const { templateId } = JSON.parse(stored); if (templateId) setSelectedTemplate(templateId); } catch (e) {} }
       const saved = localStorage.getItem(key);
-      if (saved) { try { const parsed = JSON.parse(saved); if (parsed.resumeData) setResumeData(parsed.resumeData); if (parsed.templateId) setSelectedTemplate(parsed.templateId); } catch (e) {} }
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // Only restore data if it matches current version; otherwise fresh sample is shown
+          if (parsed.version === GUEST_VERSION && parsed.resumeData) setResumeData(parsed.resumeData);
+          if (parsed.templateId) setSelectedTemplate(parsed.templateId);
+        } catch (e) {}
+      }
     }
   }, [isNewDoc, isAuthenticated, isCV]);
 
   useEffect(() => {
     if (isGuestMode) {
       const key = isCV ? "resumeforge_guest_cv" : "resumeforge_guest_resume";
-      localStorage.setItem(key, JSON.stringify({ resumeData, templateId: selectedTemplate }));
+      localStorage.setItem(key, JSON.stringify({ resumeData, templateId: selectedTemplate, version: GUEST_VERSION }));
     }
   }, [resumeData, selectedTemplate, isGuestMode, isCV]);
 

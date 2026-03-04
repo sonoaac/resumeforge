@@ -220,11 +220,11 @@ export default function LandingPage() {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-              <a href="/api/login" data-testid="button-create-resume">
+              <Link href="/onboarding" data-testid="button-create-resume">
                 <Button size="lg" className="bg-primary hover:bg-primary/90">
                   Create a new resume
                 </Button>
-              </a>
+              </Link>
               <Link href="/templates" data-testid="button-browse-templates">
                 <Button variant="outline" size="lg">
                   Browse templates
