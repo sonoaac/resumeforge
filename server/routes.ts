@@ -31,6 +31,32 @@ export async function registerRoutes(
   // Seed templates on startup
   await storage.seedTemplates();
 
+  // Public PDF generation endpoint (no auth required - for guest mode)
+  app.post("/api/pdf/generate", async (req, res) => {
+    try {
+      const { resumeData, templateId } = req.body;
+
+      const parsed = resumeDataSchema.safeParse(resumeData);
+      if (!parsed.success) {
+        return res.status(400).json({ error: "Invalid resume data" });
+      }
+
+      const pdfBuffer = await generateResumePDF({
+        resumeData: parsed.data,
+        templateId: templateId || "classic-one",
+        showWatermark: true,
+      });
+
+      const filename = `${parsed.data.profile.fullName || "resume"}.pdf`.replace(/[^a-zA-Z0-9.-]/g, "_");
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader("Content-Disposition", `attachment; filename="${filename}"`);
+      res.send(pdfBuffer);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+      res.status(500).json({ error: "Failed to generate PDF" });
+    }
+  });
+
   // Templates API
   app.get("/api/templates", async (req, res) => {
     try {

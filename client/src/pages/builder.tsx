@@ -728,17 +728,29 @@ function FinalizeForm({ data, isCV }: { data: ResumeData; isCV: boolean }) {
   );
 }
 
-function ExportForm({ resumeId, templateId, isGuestMode, isCV }: { resumeId?: string; templateId: string; isGuestMode?: boolean; isCV?: boolean }) {
+function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { resumeId?: string; templateId: string; isGuestMode?: boolean; isCV?: boolean; resumeData?: ResumeData }) {
   const { toast } = useToast();
   const template = allTemplates.find(t => t.id === templateId);
   const [isExporting, setIsExporting] = useState(false);
   const docLabel = isCV ? "CV" : "Resume";
 
   const handleExportPDF = async () => {
-    if (isGuestMode || !resumeId) { window.location.href = "/api/login"; return; }
     setIsExporting(true);
     try {
-      const response = await fetch(`/api/resumes/${resumeId}/download`, { credentials: "include" });
+      let response: Response;
+      if (isGuestMode && resumeData) {
+        // Guest mode: use the public PDF endpoint with in-memory data
+        response = await fetch("/api/pdf/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ resumeData, templateId }),
+        });
+      } else if (resumeId) {
+        response = await fetch(`/api/resumes/${resumeId}/download`, { credentials: "include" });
+      } else {
+        window.location.href = "/api/login";
+        return;
+      }
       if (!response.ok) { const error = await response.json(); throw new Error(error.error || "Failed to export"); }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
@@ -764,9 +776,9 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV }: { resumeId?: st
           <div className="flex items-start gap-3">
             <Lock className="w-5 h-5 text-primary mt-0.5" />
             <div>
-              <h4 className="font-medium text-slate-800">Sign in to download</h4>
-              <p className="text-sm text-slate-600 mt-1">Your {docLabel} is ready! Create a free account to download and save it.</p>
-              <a href="/api/login" data-testid="link-login-export"><Button className="mt-3" size="sm">Sign in to continue</Button></a>
+              <h4 className="font-medium text-slate-800">Guest mode — PDF includes watermark</h4>
+              <p className="text-sm text-slate-600 mt-1">Your {docLabel} is ready! Download with watermark for free, or sign in to save and remove it.</p>
+              <a href="/api/login" data-testid="link-login-export"><Button className="mt-3" size="sm" variant="outline">Sign in to remove watermark</Button></a>
             </div>
           </div>
         </Card>
@@ -777,7 +789,7 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV }: { resumeId?: st
           <Button onClick={handleExportPDF} disabled={isExporting} className="w-full justify-between" data-testid="button-export-pdf">
             <span className="flex items-center gap-2">
               {isExporting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
-              {isGuestMode ? `Sign in to download PDF` : (isExporting ? "Generating PDF..." : `Download ${docLabel} PDF`)}
+              {isExporting ? "Generating PDF..." : `Download ${docLabel} PDF${isGuestMode ? " (with watermark)" : ""}`}
             </span>
             <Badge variant="secondary">Free (Watermark)</Badge>
           </Button>
@@ -938,7 +950,7 @@ export default function BuilderPage() {
       case "languages":     return <LanguagesForm data={resumeData} onChange={handleDataChange} />;
       case "references":    return <ReferencesForm data={resumeData} onChange={handleDataChange} />;
       case "finalize":      return <FinalizeForm data={resumeData} isCV={isCV} />;
-      case "export":        return <ExportForm resumeId={params.id} templateId={selectedTemplate} isGuestMode={isGuestMode} isCV={isCV} />;
+      case "export":        return <ExportForm resumeId={params.id} templateId={selectedTemplate} isGuestMode={isGuestMode} isCV={isCV} resumeData={resumeData} />;
       default:              return null;
     }
   };

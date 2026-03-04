@@ -6,7 +6,12 @@ import session from "express-session";
 import type { Express, RequestHandler } from "express";
 import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
+import MemoryStoreFactory from "memorystore";
 import { authStorage } from "./storage";
+
+const MemoryStore = MemoryStoreFactory(session);
+
+const isReplitEnabled = !!process.env.REPL_ID;
 
 const getOidcConfig = memoize(
   async () => {
@@ -20,21 +25,37 @@ const getOidcConfig = memoize(
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
-  const pgStore = connectPg(session);
-  const sessionStore = new pgStore({
-    conString: process.env.DATABASE_URL,
-    createTableIfMissing: false,
-    ttl: sessionTtl,
-    tableName: "sessions",
-  });
+  const secret = process.env.SESSION_SECRET || "dev-secret-please-set-session-secret-in-prod";
+
+  if (process.env.DATABASE_URL) {
+    const pgStore = connectPg(session);
+    const sessionStore = new pgStore({
+      conString: process.env.DATABASE_URL,
+      createTableIfMissing: false,
+      ttl: sessionTtl,
+      tableName: "sessions",
+    });
+    return session({
+      secret,
+      store: sessionStore,
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        maxAge: sessionTtl,
+      },
+    });
+  }
+
   return session({
-    secret: process.env.SESSION_SECRET!,
-    store: sessionStore,
+    secret,
+    store: new MemoryStore({ checkPeriod: sessionTtl }),
     resave: false,
     saveUninitialized: false,
     cookie: {
       httpOnly: true,
-      secure: true,
+      secure: false,
       maxAge: sessionTtl,
     },
   });
@@ -66,25 +87,31 @@ export async function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  if (!isReplitEnabled) {
+    // No Replit auth configured — stub out auth routes for guest mode
+    app.get("/api/login", (_req, res) => res.status(501).json({ message: "Login not configured" }));
+    app.get("/api/callback", (_req, res) => res.status(501).json({ message: "Auth not configured" }));
+    app.get("/api/logout", (_req, res) => res.redirect("/"));
+    return;
+  }
+
   const config = await getOidcConfig();
 
-  const verify: VerifyFunction = async (
-    tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
-    verified: passport.AuthenticateCallback
-  ) => {
-    const user = {};
-    updateUserSession(user, tokens);
-    await upsertUser(tokens.claims());
-    verified(null, user);
-  };
-
-  // Keep track of registered strategies
   const registeredStrategies = new Set<string>();
 
-  // Helper function to ensure strategy exists for a domain
   const ensureStrategy = (domain: string) => {
     const strategyName = `replitauth:${domain}`;
     if (!registeredStrategies.has(strategyName)) {
+      const verify: VerifyFunction = async (
+        tokens: client.TokenEndpointResponse & client.TokenEndpointResponseHelpers,
+        verified: passport.AuthenticateCallback
+      ) => {
+        const user = {};
+        updateUserSession(user, tokens);
+        await upsertUser(tokens.claims());
+        verified(null, user);
+      };
+
       const strategy = new Strategy(
         {
           name: strategyName,
@@ -131,9 +158,13 @@ export async function setupAuth(app: Express) {
 }
 
 export const isAuthenticated: RequestHandler = async (req, res, next) => {
+  if (!isReplitEnabled) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
   const user = req.user as any;
 
-  if (!req.isAuthenticated() || !user.expires_at) {
+  if (!req.isAuthenticated() || !user?.expires_at) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -144,8 +175,7 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
 
   const refreshToken = user.refresh_token;
   if (!refreshToken) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
 
   try {
@@ -154,7 +184,6 @@ export const isAuthenticated: RequestHandler = async (req, res, next) => {
     updateUserSession(user, tokenResponse);
     return next();
   } catch (error) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
+    return res.status(401).json({ message: "Unauthorized" });
   }
 };
