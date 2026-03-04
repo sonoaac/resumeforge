@@ -79,34 +79,79 @@ const cvSteps: WizardStep[] = [
 ];
 
 // ─────────────────────────────────────────────
+// Preview sample data for template thumbnails
+// ─────────────────────────────────────────────
+const resumePreviewData: ResumeData = {
+  documentType: "resume",
+  profile: { fullName: "Sonoaac Mar", professionalTitle: "Web Developer", email: "sonoaac@email.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "linkedin.com/in/sonoaacmar", portfolio: "sonoaac.dev", website: "" },
+  summary: { headline: "Web Developer", text: "Creative web developer with 5+ years of experience building responsive, accessible applications. Passionate about clean code and great user experiences." },
+  experience: [
+    { id: "p1", jobTitle: "Web Developer", company: "Tech Studio NYC", location: "Brooklyn, NY", startDate: "2021-03", endDate: "", isCurrent: true, bullets: ["Built responsive web applications for 20+ clients", "Led frontend development with React and TypeScript", "Improved site performance by 45% through optimization"] },
+    { id: "p2", jobTitle: "Junior Developer", company: "Digital Agency", location: "New York, NY", startDate: "2019-06", endDate: "2021-02", isCurrent: false, bullets: ["Developed interactive UI components", "Collaborated with design team on user flows"] },
+  ],
+  education: [{ id: "e1", degree: "B.S. Computer Science", fieldOfStudy: "Computer Science", school: "City University of New York", location: "New York, NY", startDate: "2015-09", endDate: "2019-05", isCurrent: false, honors: "" }],
+  skills: [{ id: "s1", name: "React", level: "expert" }, { id: "s2", name: "TypeScript", level: "advanced" }, { id: "s3", name: "Node.js", level: "advanced" }, { id: "s4", name: "CSS / Tailwind", level: "expert" }],
+  projects: [{ id: "pr1", name: "ResumeForge", role: "Lead Developer", description: "Full-stack resume builder with 50+ templates", startDate: "2023-01", endDate: "", tools: "React, TypeScript, Express", link: "" }],
+  certifications: [], awards: [], languages: [], customSections: [], publications: [], research: [], teaching: [], presentations: [], grants: [], references: [],
+};
+
+const cvPreviewData: ResumeData = {
+  documentType: "cv",
+  profile: { fullName: "Sonoaac Mar", professionalTitle: "Research Scholar", email: "sonoaac@edu.com", phone: "0000000000", city: "Brooklyn", state: "NY", country: "USA", linkedIn: "", portfolio: "sonoaac.edu", website: "" },
+  summary: { headline: "Research Scholar", text: "Academic researcher with expertise in computational methods. Published in peer-reviewed journals with experience in grant writing and graduate instruction." },
+  experience: [],
+  education: [{ id: "e1", degree: "Ph.D. Computer Science", fieldOfStudy: "Computer Science", school: "City University of New York", location: "New York, NY", startDate: "2018-09", endDate: "2023-05", isCurrent: false, honors: "" }],
+  skills: [{ id: "s1", name: "Python", level: "expert" }, { id: "s2", name: "R", level: "advanced" }, { id: "s3", name: "Machine Learning", level: "advanced" }],
+  projects: [], certifications: [],
+  awards: [{ id: "a1", name: "Best Paper Award", awardingBody: "ACM", date: "2022-06", description: "" }],
+  languages: [{ id: "l1", name: "English", proficiency: "native" }],
+  customSections: [],
+  publications: [{ id: "pub1", title: "Neural Networks in Context", authors: "Mar, S. et al.", journal: "Journal of AI Research", year: "2022", doi: "", type: "journal" }],
+  research: [{ id: "r1", title: "Computational Linguistics Lab", institution: "CUNY", supervisor: "Dr. Smith", startDate: "2019-01", endDate: "", isCurrent: true, description: "Analysis of transformer-based language models" }],
+  teaching: [{ id: "t1", course: "Intro to Programming", role: "Teaching Assistant", institution: "CUNY", startDate: "2018-09", endDate: "2020-05", isCurrent: false, description: "" }],
+  presentations: [], grants: [], references: [],
+};
+
+// ─────────────────────────────────────────────
 // Shared form helpers
 // ─────────────────────────────────────────────
 function TemplateSelector({ selectedId, onSelect, isCV }: { selectedId: string; onSelect: (id: string) => void; isCV?: boolean }) {
   const templates = getReleasedTemplates().filter(t => isCV ? t.type === "cv" : t.type === "resume");
+  const previewData = isCV ? cvPreviewData : resumePreviewData;
   return (
     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {templates.map((template) => (
         <button
           key={template.id}
           onClick={() => onSelect(template.id)}
-          className={`relative rounded-lg border-2 overflow-hidden transition-all ${
-            selectedId === template.id ? "border-primary ring-2 ring-primary/20" : "border-slate-200 hover:border-slate-300"
+          className={`relative rounded-lg border-2 overflow-hidden transition-all bg-white ${
+            selectedId === template.id ? "border-primary ring-2 ring-primary/20" : "border-slate-200 hover:border-slate-400"
           }`}
           data-testid={`template-select-${template.id}`}
         >
-          <div className="aspect-[3/4] bg-gradient-to-b from-slate-50 to-slate-100 p-2" style={{ borderLeft: `3px solid ${template.accentColor}` }}>
-            <div className="h-full bg-white rounded shadow-sm p-2">
-              <div className="flex items-center gap-1.5 mb-1.5">
-                <div className="w-4 h-4 rounded-full" style={{ backgroundColor: `${template.accentColor}30` }} />
-                <div className="h-1.5 w-10 rounded" style={{ backgroundColor: template.accentColor }} />
-              </div>
-              <div className="space-y-1">
-                <div className="h-1 w-full bg-slate-200 rounded" />
-                <div className="h-1 w-4/5 bg-slate-200 rounded" />
-              </div>
+          {/* Scaled HTML preview thumbnail */}
+          <div className="aspect-[3/4] relative overflow-hidden bg-white">
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "816px",
+                height: "1056px",
+                transform: "scale(0.22)",
+                transformOrigin: "top left",
+                pointerEvents: "none",
+              }}
+            >
+              <ResumePreview data={previewData} templateId={template.id} />
             </div>
+            {selectedId === template.id && (
+              <div className="absolute top-1.5 right-1.5 w-5 h-5 rounded-full bg-primary flex items-center justify-center z-10">
+                <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              </div>
+            )}
           </div>
-          <div className="p-2 bg-white">
+          <div className="p-2 border-t border-slate-100">
             <p className="text-xs font-medium text-slate-700 truncate">{template.name}</p>
           </div>
         </button>
@@ -744,7 +789,11 @@ function ExportForm({ resumeId, templateId, isGuestMode, isCV, resumeData }: { r
         window.location.href = "/api/login";
         return;
       }
-      if (!response.ok) { const error = await response.json(); throw new Error(error.error || "Failed to export"); }
+      if (!response.ok) {
+        let msg = "Failed to export PDF";
+        try { const e = await response.json(); msg = e.error || msg; } catch {}
+        throw new Error(msg);
+      }
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement("a");
@@ -805,7 +854,7 @@ export default function BuilderPage() {
   const wizardSteps = isCV ? cvSteps : resumeSteps;
 
   const searchParams = new URLSearchParams(search);
-  const initialTemplate = searchParams.get("template") || (isCV ? "academic-formal" : "classic-one");
+  const initialTemplate = searchParams.get("template") || (isCV ? "academic-formal" : "classic-clean");
 
   const isNewDoc = !params.id && (location === "/builder/new" || location === "/cv-builder/new" || location === "/builder" || location === "/cv-builder");
   const isGuestMode = !isAuthenticated && isNewDoc;

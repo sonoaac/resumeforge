@@ -5,10 +5,182 @@ import { Footer } from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { allTemplates, templateFamilies, type TemplateInfo } from "@/lib/templates";
+import { ResumePreview } from "@/components/resume/ResumePreview";
+import type { ResumeData } from "@shared/schema";
 import { motion } from "framer-motion";
 
+// ── Preview sample data shown in all template thumbnails ──────────────────────
+const resumePreviewData: ResumeData = {
+  documentType: "resume",
+  profile: {
+    fullName: "Sonoaac Mar",
+    professionalTitle: "Web Developer",
+    email: "sonoaac@email.com",
+    phone: "0000000000",
+    city: "Brooklyn",
+    state: "NY",
+    country: "USA",
+    linkedIn: "linkedin.com/in/sonoaacmar",
+    portfolio: "sonoaac.dev",
+    website: "",
+  },
+  summary: {
+    headline: "Web Developer",
+    text: "Creative web developer with 5+ years of experience building responsive, accessible applications. Passionate about clean code and great user experiences.",
+  },
+  experience: [
+    {
+      id: "p1",
+      jobTitle: "Web Developer",
+      company: "Tech Studio NYC",
+      location: "Brooklyn, NY",
+      startDate: "2021-03",
+      endDate: "",
+      isCurrent: true,
+      bullets: [
+        "Built responsive web applications for 20+ clients",
+        "Led frontend development with React and TypeScript",
+        "Improved site performance by 45% through optimization",
+      ],
+    },
+    {
+      id: "p2",
+      jobTitle: "Junior Developer",
+      company: "Digital Agency",
+      location: "New York, NY",
+      startDate: "2019-06",
+      endDate: "2021-02",
+      isCurrent: false,
+      bullets: [
+        "Developed interactive UI components",
+        "Collaborated with design team on user flows",
+      ],
+    },
+  ],
+  education: [
+    {
+      id: "e1",
+      degree: "B.S. Computer Science",
+      fieldOfStudy: "Computer Science",
+      school: "City University of New York",
+      location: "New York, NY",
+      startDate: "2015-09",
+      endDate: "2019-05",
+      isCurrent: false,
+      honors: "",
+    },
+  ],
+  skills: [
+    { id: "s1", name: "React", level: "expert" },
+    { id: "s2", name: "TypeScript", level: "advanced" },
+    { id: "s3", name: "Node.js", level: "advanced" },
+    { id: "s4", name: "CSS / Tailwind", level: "expert" },
+    { id: "s5", name: "PostgreSQL", level: "intermediate" },
+  ],
+  projects: [
+    {
+      id: "pr1",
+      name: "ResumeForge",
+      role: "Lead Developer",
+      description: "Full-stack resume builder with 50+ templates",
+      startDate: "2023-01",
+      endDate: "",
+      tools: "React, TypeScript, Express",
+      link: "",
+    },
+  ],
+  certifications: [],
+  awards: [],
+  languages: [],
+  customSections: [],
+  publications: [],
+  research: [],
+  teaching: [],
+  presentations: [],
+  grants: [],
+  references: [],
+};
+
+const cvPreviewData: ResumeData = {
+  documentType: "cv",
+  profile: {
+    fullName: "Sonoaac Mar",
+    professionalTitle: "Research Scholar",
+    email: "sonoaac@edu.com",
+    phone: "0000000000",
+    city: "Brooklyn",
+    state: "NY",
+    country: "USA",
+    linkedIn: "",
+    portfolio: "sonoaac.edu",
+    website: "",
+  },
+  summary: {
+    headline: "Research Scholar",
+    text: "Academic researcher with expertise in computational methods and interdisciplinary studies. Published in peer-reviewed journals with experience in grant writing and graduate instruction.",
+  },
+  experience: [],
+  education: [
+    {
+      id: "e1",
+      degree: "Ph.D. Computer Science",
+      fieldOfStudy: "Computer Science",
+      school: "City University of New York",
+      location: "New York, NY",
+      startDate: "2018-09",
+      endDate: "2023-05",
+      isCurrent: false,
+      honors: "",
+    },
+    {
+      id: "e2",
+      degree: "B.S. Computer Science",
+      fieldOfStudy: "Computer Science",
+      school: "CUNY Brooklyn College",
+      location: "Brooklyn, NY",
+      startDate: "2014-09",
+      endDate: "2018-05",
+      isCurrent: false,
+      honors: "Summa Cum Laude",
+    },
+  ],
+  skills: [
+    { id: "s1", name: "Python", level: "expert" },
+    { id: "s2", name: "R", level: "advanced" },
+    { id: "s3", name: "Machine Learning", level: "advanced" },
+    { id: "s4", name: "Data Analysis", level: "expert" },
+  ],
+  projects: [],
+  certifications: [],
+  awards: [
+    { id: "a1", name: "Best Paper Award", awardingBody: "ACM Conference", date: "2022-06", description: "" },
+  ],
+  languages: [
+    { id: "l1", name: "English", proficiency: "native" },
+    { id: "l2", name: "French", proficiency: "conversational" },
+  ],
+  customSections: [],
+  publications: [
+    { id: "pub1", title: "Neural Networks in Context", authors: "Mar, S. et al.", journal: "Journal of AI Research", year: "2022", doi: "", type: "journal" },
+    { id: "pub2", title: "Computational Linguistics Survey", authors: "Mar, S., Smith, J.", journal: "NLP Conference", year: "2021", doi: "", type: "conference" },
+  ],
+  research: [
+    { id: "r1", title: "Computational Linguistics Lab", institution: "CUNY", supervisor: "Dr. Smith", startDate: "2019-01", endDate: "", isCurrent: true, description: "Analysis of transformer-based language models" },
+  ],
+  teaching: [
+    { id: "t1", course: "Intro to Programming", role: "Teaching Assistant", institution: "CUNY", startDate: "2018-09", endDate: "2020-05", isCurrent: false, description: "" },
+  ],
+  presentations: [
+    { id: "pres1", title: "Deep Learning in NLP", event: "ACM Symposium", location: "New York, NY", date: "2022-04", type: "oral" },
+  ],
+  grants: [],
+  references: [],
+};
+
+// ── Template card with real HTML preview ─────────────────────────────────────
 function TemplateCard({ template }: { template: TemplateInfo }) {
   const isComingSoon = !template.isReleased;
+  const previewData = template.type === "cv" ? cvPreviewData : resumePreviewData;
 
   return (
     <motion.div
@@ -24,48 +196,25 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
         </div>
       )}
 
-      <div
-        className="aspect-[3/4] bg-gradient-to-b from-slate-50 to-slate-100 p-4 relative overflow-hidden"
-        style={{ borderLeft: `4px solid ${template.accentColor}` }}
-      >
-        <div className="h-full bg-white rounded shadow-sm p-3 text-left">
-          <div className="flex items-center gap-2 mb-2">
-            <div 
-              className="w-8 h-8 rounded-full" 
-              style={{ backgroundColor: `${template.accentColor}20` }}
-            />
-            <div>
-              <div 
-                className="h-2.5 w-20 rounded" 
-                style={{ backgroundColor: template.accentColor }}
-              />
-              <div className="h-1.5 w-16 bg-slate-300 rounded mt-1" />
-            </div>
-          </div>
-          <div className="space-y-1.5 mt-3">
-            <div className="h-1.5 w-full bg-slate-200 rounded" />
-            <div className="h-1.5 w-5/6 bg-slate-200 rounded" />
-            <div className="h-1.5 w-4/5 bg-slate-200 rounded" />
-          </div>
-          <div 
-            className="h-1.5 w-16 rounded mt-3" 
-            style={{ backgroundColor: `${template.accentColor}60` }}
-          />
-          <div className="space-y-1 mt-2">
-            <div className="h-1 w-full bg-slate-100 rounded" />
-            <div className="h-1 w-3/4 bg-slate-100 rounded" />
-          </div>
-          {template.layout === "two-column" && (
-            <div className="absolute right-3 top-12 w-12 space-y-2">
-              <div className="h-1 w-full bg-slate-200 rounded" />
-              <div className="h-1 w-3/4 bg-slate-200 rounded" />
-              <div className="h-1 w-full bg-slate-200 rounded" />
-            </div>
-          )}
+      {/* Scaled live HTML preview */}
+      <div className="aspect-[3/4] relative overflow-hidden bg-white">
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "816px",
+            height: "1056px",
+            transform: "scale(0.25)",
+            transformOrigin: "top left",
+            pointerEvents: "none",
+          }}
+        >
+          <ResumePreview data={previewData} templateId={template.id} />
         </div>
 
         {!isComingSoon && (
-          <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/80 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+          <div className="absolute inset-0 bg-slate-900/0 group-hover:bg-slate-900/70 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10">
             <Link href={`/builder?template=${template.id}`} data-testid={`button-use-template-${template.id}`}>
               <Button className="bg-primary hover:bg-primary/90">
                 Use Template
@@ -75,10 +224,10 @@ function TemplateCard({ template }: { template: TemplateInfo }) {
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="font-medium text-slate-800">{template.name}</h3>
+      <div className="p-3 border-t border-slate-100">
+        <h3 className="font-medium text-slate-800 text-sm truncate">{template.name}</h3>
         <div className="flex items-center justify-between mt-1">
-          <span className="text-sm text-slate-500 capitalize">{template.family}</span>
+          <span className="text-xs text-slate-500 capitalize">{template.family}</span>
           {template.bestFor && (
             <Badge variant="outline" className="text-xs capitalize">
               {template.bestFor}

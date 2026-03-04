@@ -10,7 +10,6 @@ import PricingPage from "@/pages/pricing";
 import DashboardPage from "@/pages/dashboard";
 import BuilderPage from "@/pages/builder";
 import OnboardingPage from "@/pages/onboarding";
-import SelectTemplatePage from "@/pages/select-template";
 import { useAuth } from "@/hooks/use-auth";
 import CVOnboardingPage from "@/pages/cv-onboarding";
 
@@ -26,7 +25,6 @@ function Router() {
       <Route path="/pricing" component={PricingPage} />
       <Route path="/dashboard" component={DashboardPage} />
       <Route path="/onboarding" component={OnboardingPage} />
-      <Route path="/select-template" component={SelectTemplatePage} />
       <Route path="/builder/new" component={BuilderPage} />
       <Route path="/builder" component={BuilderPage} />
       <Route path="/builder/:id" component={BuilderPage} />

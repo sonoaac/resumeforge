@@ -50,7 +50,7 @@ export default function Onboarding() {
 
   const saveAndNavigate = (onboardingData: OnboardingData) => {
     localStorage.setItem("resumeforge_onboarding", JSON.stringify(onboardingData));
-    setLocation("/select-template");
+    setLocation("/builder/new");
   };
 
   return (

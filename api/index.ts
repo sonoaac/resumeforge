@@ -34,7 +34,7 @@ app.post("/api/pdf/generate", async (req, res) => {
 
     const pdfBuffer = await generateResumePDF({
       resumeData: parsed.data,
-      templateId: templateId || "classic-one",
+      templateId: templateId || "classic-clean",
     });
 
     const filename = `${parsed.data.profile.fullName || "resume"}.pdf`.replace(
